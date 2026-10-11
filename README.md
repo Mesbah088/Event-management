@@ -4,10 +4,12 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-23_Passed-FCC72B?style=for-the-badge&logo=vitest)](https://vitest.dev/)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMesbah088%2FEvent-management)
+[![Vitest](https://img.shields.io/badge/Vitest-24_Passed-FCC72B?style=for-the-badge&logo=vitest)](https://vitest.dev/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel)](https://eventmanagement-sooty.vercel.app/)
 
 An enterprise-grade, high-throughput web application engineered for **NITER ISLAMIC Conference 2026** (National Institute of Textile Engineering and Research). Designed for 500–2,000 attendees with instant cryptographic QR ticket issuance, mobile camera gate scanners, and a strict **Single-Checkin Atomic Database Guarantee**.
+
+🌐 **Live Production App**: **[https://eventmanagement-sooty.vercel.app](https://eventmanagement-sooty.vercel.app)**
 
 ---
 
@@ -177,6 +179,10 @@ Test Files  4 passed (4)
 │   ├── dev-mongo.js            # Standalone dev Mongo runner with seeding
 │   ├── ensure-indexes.js       # Production MongoDB index provisioning
 │   └── seed-niter-event.js     # NITER Conference event seeder
+├── server/                     # Standalone Express.js backend server
+│   ├── index.js                # Express API (Auth, Events, Register, QR check-in)
+│   ├── package.json            # Server package definition
+│   └── README.md               # Standalone server documentation
 ├── src/
 │   ├── __tests__/              # Vitest test suites (23 tests)
 │   ├── app/
