@@ -15,5 +15,13 @@ describe('InMemoryDb', () => {
     const events = await db.collection('events').find({ status: { $in: ['PUBLISHED', 'CLOSED'] } }).sort({ startDate: 1 }).toArray();
     expect(events.length).toBeGreaterThan(0);
     expect(events[0].title).toBe('NITER ISLAMIC Conference 2026');
+
+    // Test findOneAndUpdate with $lt
+    const reserve = await db.collection('events').findOneAndUpdate(
+      { slug: 'niter-islamic-conference-2026', registeredCount: { $lt: 1500 } },
+      { $inc: { registeredCount: 1 } }
+    );
+    expect(reserve).toBeDefined();
+    expect(reserve.registeredCount).toBe(1);
   });
 });

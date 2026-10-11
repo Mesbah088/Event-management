@@ -69,11 +69,26 @@ export class InMemoryCollection {
         continue;
       }
 
-      // Handle operators like $in
-      if (expected && typeof expected === 'object' && '$in' in (expected as any)) {
-        const inList = (expected as any).$in;
-        if (Array.isArray(inList) && !inList.includes(actual)) {
-          return false;
+      // Handle query operators
+      if (expected && typeof expected === 'object') {
+        const expObj = expected as any;
+        if ('$in' in expObj && Array.isArray(expObj.$in)) {
+          if (!expObj.$in.includes(actual)) return false;
+        }
+        if ('$lt' in expObj) {
+          if (!(actual < expObj.$lt)) return false;
+        }
+        if ('$lte' in expObj) {
+          if (!(actual <= expObj.$lte)) return false;
+        }
+        if ('$gt' in expObj) {
+          if (!(actual > expObj.$gt)) return false;
+        }
+        if ('$gte' in expObj) {
+          if (!(actual >= expObj.$gte)) return false;
+        }
+        if ('$ne' in expObj) {
+          if (actual === expObj.$ne) return false;
         }
         continue;
       }
