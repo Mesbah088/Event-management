@@ -1,0 +1,15 @@
+{
+  "name": "niter-event-management-server",
+  "version": "1.0.0",
+  "description": "Standalone Backend API Server for NITER ISLAMIC Conference 2026",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3",
+    "qrcode": "^1.5.3"
+  }
+}
