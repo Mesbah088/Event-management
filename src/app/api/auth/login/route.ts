@@ -69,6 +69,12 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     console.error('Login error:', error);
+    if (error?.message?.includes('ECONNREFUSED') || error?.name?.includes('Mongo') || error?.message?.includes('topology')) {
+      return NextResponse.json(
+        { error: 'Database connection error: MONGODB_URI is not configured in Vercel environment variables.' },
+        { status: 500 }
+      );
+    }
     return NextResponse.json({ error: 'Internal server error during authentication.' }, { status: 500 });
   }
 }

@@ -11,33 +11,28 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-if (process.env.NODE_ENV === 'development') {
-  // In development mode, use a global variable so that the value
-  // is preserved across module reloads caused by HMR (Hot Module Replacement).
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, {
-      maxPoolSize: 20,
-      minPoolSize: 5,
-      serverSelectionTimeoutMS: 5000,
-    });
-    global._mongoClientPromise = client.connect();
+if (!global._mongoClientPromise) {
+  if (!process.env.MONGODB_URI && process.env.NODE_ENV === 'production') {
+    console.warn('⚠️ Warning: MONGODB_URI is not set. Please add MONGODB_URI in Vercel project settings.');
   }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // In production mode, it's best to not use a global variable.
+
   client = new MongoClient(uri, {
-    maxPoolSize: 50,
-    minPoolSize: 5,
+    maxPoolSize: 20,
+    minPoolSize: 1,
     serverSelectionTimeoutMS: 5000,
   });
-  clientPromise = client.connect();
+  global._mongoClientPromise = client.connect();
 }
+clientPromise = global._mongoClientPromise;
 
 export async function getMongoClient(): Promise<MongoClient> {
   return clientPromise;
 }
 
 export async function getDb(): Promise<Db> {
+  if (!process.env.MONGODB_URI && process.env.NODE_ENV === 'production') {
+    throw new Error('Database configuration missing: MONGODB_URI is not set in Vercel environment variables.');
+  }
   const connectedClient = await clientPromise;
   return connectedClient.db(dbName);
 }

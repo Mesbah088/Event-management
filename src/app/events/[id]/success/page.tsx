@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
@@ -29,11 +29,7 @@ interface TicketData {
   organizer: string;
 }
 
-export default function RegistrationSuccessPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+function SuccessContent({ eventSlug }: { eventSlug: string }) {
   const searchParams = useSearchParams();
   const ticketRefParam = searchParams.get('ticketRef');
   const [ticket, setTicket] = useState<TicketData | null>(null);
@@ -208,5 +204,27 @@ export default function RegistrationSuccessPage({
 
       <Footer />
     </div>
+  );
+}
+
+export default function RegistrationSuccessPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <div className="flex-1 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600" />
+          </div>
+          <Footer />
+        </div>
+      }
+    >
+      <SuccessContent eventSlug={params.id} />
+    </Suspense>
   );
 }
