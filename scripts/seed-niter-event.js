@@ -6,7 +6,8 @@ async function run() {
 
   try {
     await client.connect();
-    const db = client.db('university_events');
+    const dbName = process.env.MONGODB_DB_NAME || 'university_events';
+    const db = client.db(dbName);
     const now = new Date();
 
     const slug = 'niter-islamic-conference-2026';
