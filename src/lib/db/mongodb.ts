@@ -12,18 +12,25 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient | null> | undefined;
 }
 
-if (uri) {
+const isPlaceholder = !uri || uri.includes('<') || uri.includes('>') || !uri.startsWith('mongodb');
+
+if (!isPlaceholder && uri) {
   if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, {
-      maxPoolSize: 20,
-      minPoolSize: 1,
-      serverSelectionTimeoutMS: 3000,
-      connectTimeoutMS: 3000,
-    });
-    global._mongoClientPromise = client.connect().catch((err) => {
-      console.warn('⚠️ Could not connect to MongoDB, falling back to in-memory store:', err?.message);
-      return null;
-    });
+    try {
+      client = new MongoClient(uri, {
+        maxPoolSize: 20,
+        minPoolSize: 1,
+        serverSelectionTimeoutMS: 1500,
+        connectTimeoutMS: 1500,
+      });
+      global._mongoClientPromise = client.connect().catch((err) => {
+        console.warn('⚠️ Could not connect to remote MongoDB, using in-memory store:', err?.message);
+        return null;
+      });
+    } catch (e: any) {
+      console.warn('⚠️ Invalid MongoDB URI, using in-memory store:', e?.message);
+      global._mongoClientPromise = Promise.resolve(null);
+    }
   }
   clientPromise = global._mongoClientPromise;
 }

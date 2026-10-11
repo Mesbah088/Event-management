@@ -27,8 +27,9 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, password } = validated.data;
+    const normalizedEmail = email.trim().toLowerCase();
     const db = await getDb();
-    const user = await db.collection<User>('users').findOne({ email });
+    const user = await db.collection<User>('users').findOne({ email: normalizedEmail });
 
     if (!user) {
       return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 });
