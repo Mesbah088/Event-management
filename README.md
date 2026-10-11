@@ -5,6 +5,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
 [![Vitest](https://img.shields.io/badge/Vitest-23_Passed-FCC72B?style=for-the-badge&logo=vitest)](https://vitest.dev/)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMesbah088%2FEvent-management)
 
 An enterprise-grade, high-throughput web application engineered for **NITER ISLAMIC Conference 2026** (National Institute of Textile Engineering and Research). Designed for 500–2,000 attendees with instant cryptographic QR ticket issuance, mobile camera gate scanners, and a strict **Single-Checkin Atomic Database Guarantee**.
 
