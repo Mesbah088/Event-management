@@ -59,6 +59,13 @@ export default function Navbar() {
           </Link>
 
           <Link
+            href="/#sponsors"
+            className="px-3 py-2 rounded-lg text-sm font-semibold text-purple-700 hover:text-purple-900 hover:bg-purple-50 transition-colors"
+          >
+            স্পন্সর (Sponsors)
+          </Link>
+
+          <Link
             href="/#donation-section"
             className="px-3 py-2 rounded-lg text-sm font-semibold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 transition-colors flex items-center space-x-1.5"
           >

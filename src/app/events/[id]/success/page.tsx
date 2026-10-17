@@ -264,6 +264,23 @@ function SuccessContent({ eventSlug }: { eventSlug: string }) {
           initialBatch={ticket?.batch || ''}
         />
 
+        {/* Event Sponsors Trust Bar */}
+        <div className="mt-8 p-5 bg-white rounded-3xl border border-slate-200 shadow-sm text-center">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-3">
+            সম্মানিত অফিসিয়াল স্পন্সরবৃন্দ (Official Event Sponsors)
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 opacity-90 hover:opacity-100 transition-opacity">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/sponsors/zain-mahal.png" alt="Zainmahal" className="h-6 sm:h-7 object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/sponsors/kholzis-treasure.png" alt="Kholzi's Treasure" className="h-7 sm:h-8 object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/sponsors/shilpaholic.png" alt="Shilpaholic" className="h-7 sm:h-8 object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/sponsors/chumuk.png" alt="Chumuk" className="h-8 sm:h-9 object-contain" />
+          </div>
+        </div>
+
         <div className="text-center mt-6">
           <Link
             href="/"

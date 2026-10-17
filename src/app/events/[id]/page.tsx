@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import DonationSection from '@/components/DonationSection';
+import SponsorSection from '@/components/SponsorSection';
 import {
   Calendar,
   MapPin,
@@ -93,6 +94,42 @@ export default async function EventDetailsPage({
           </Link>
           <span>/</span>
           <span className="text-slate-800 font-semibold truncate">{event.title}</span>
+        </div>
+
+        {/* Official Event Banner & Chief Guest Spotlight */}
+        <div className="bg-gradient-to-br from-[#12031c] via-[#240a38] to-[#0c0214] text-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-amber-400/40 mb-8 overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div className="md:col-span-7 space-y-4">
+              <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
+                <span>প্রধান অতিথি ঘোষিত</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+                শায়খ ড. মিজানুর রহমান আজহারী
+              </h2>
+              <p className="text-xs sm:text-sm text-purple-200">
+                বিশিষ্ট ইসলামিক স্কলার ও গবেষক • চেয়ারম্যান, হাসানাহ ফাউন্ডেশন
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs font-semibold pt-1">
+                <span className="px-3 py-1.5 rounded-xl bg-slate-900/80 border border-purple-500/40 text-amber-300">
+                  📅 ৮-৯ নভেম্বর ২০২৬
+                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-slate-900/80 border border-purple-500/40 text-emerald-300">
+                  📍 নাইটার কেন্দ্রীয় মাঠ
+                </span>
+              </div>
+            </div>
+
+            <div className="md:col-span-5 flex justify-center">
+              <div className="rounded-2xl overflow-hidden border border-amber-400/40 shadow-xl max-w-xs w-full">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/event-banner.jpg"
+                  alt="NITER Islamic Conference 2026 Poster"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Hero Event Header Card */}
@@ -210,6 +247,9 @@ export default async function EventDetailsPage({
             <li>Please arrive at least 15 minutes prior to the scheduled start time for security scanning.</li>
           </ul>
         </div>
+
+        {/* Highlighted Sponsors & Partners Section */}
+        <SponsorSection />
 
         {/* Voluntary Conference Donation Section */}
         <DonationSection />
