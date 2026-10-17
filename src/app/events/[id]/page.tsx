@@ -66,8 +66,7 @@ export default async function EventDetailsPage({
   const isOpen =
     event.status === 'PUBLISHED' &&
     now >= new Date(event.registrationOpenAt) &&
-    now <= new Date(event.registrationCloseAt) &&
-    event.remainingSeats > 0;
+    now <= new Date(event.registrationCloseAt);
 
   const startDateFormatted = new Intl.DateTimeFormat('en-US', {
     dateStyle: 'full',
@@ -80,8 +79,6 @@ export default async function EventDetailsPage({
     timeStyle: 'short',
     timeZone: 'Asia/Dhaka',
   }).format(new Date(event.registrationCloseAt));
-
-  const capacityPct = Math.min(100, Math.round((event.registeredCount / event.capacity) * 100));
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -159,23 +156,21 @@ export default async function EventDetailsPage({
           </div>
         </div>
 
-        {/* Capacity & Registration Action Card */}
+        {/* Registration Call-to-Action Card */}
         <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex-1">
-            <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-semibold text-slate-300">Registration Capacity</span>
-              <span className="text-emerald-400 font-bold">
-                {event.registeredCount} / {event.capacity} Filled ({event.remainingSeats} Seats Available)
+            <div className="flex items-center space-x-2 mb-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                Registration Active
               </span>
             </div>
-
-            {/* Capacity Progress Bar */}
-            <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden border border-slate-700">
-              <div
-                className="bg-gradient-to-r from-brand-500 to-emerald-400 h-full rounded-full transition-all duration-500"
-                style={{ width: `${capacityPct}%` }}
-              />
-            </div>
+            <h3 className="text-xl sm:text-2xl font-extrabold text-white mb-1">
+              Join NITER ISLAMIC Conference 2026
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300">
+              Open for NITER students, alumni, and external university participants. Free digital admission pass issued immediately upon form submission.
+            </p>
           </div>
 
           <div>

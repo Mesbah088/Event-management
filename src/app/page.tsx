@@ -115,8 +115,6 @@ export default async function HomePage() {
                 timeZone: 'Asia/Dhaka',
               }).format(new Date(evt.startDate));
 
-              const isSoldOut = evt.remainingSeats <= 0;
-
               return (
                 <div
                   key={evt.id}
@@ -127,15 +125,10 @@ export default async function HomePage() {
                       <span className="text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">
                         {evt.organizer}
                       </span>
-                      {isSoldOut ? (
-                        <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-md">
-                          Capacity Full
-                        </span>
-                      ) : (
-                        <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
-                          {evt.remainingSeats} Seats Left
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md flex items-center space-x-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>Registration Open</span>
+                      </span>
                     </div>
 
                     <h3 className="text-xl font-bold text-slate-900 group-hover:text-brand-600 transition-colors mb-2">
@@ -157,7 +150,7 @@ export default async function HomePage() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <Users className="w-4 h-4 text-slate-400 shrink-0" />
-                        <span>Capacity: {evt.capacity} Attendees</span>
+                        <span>Open for Students, Alumni & Guests</span>
                       </div>
                     </div>
                   </div>
@@ -171,15 +164,11 @@ export default async function HomePage() {
                     </Link>
 
                     <Link
-                      href={isSoldOut ? '#' : `/events/${evt.slug}/register`}
-                      className={`inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                        isSoldOut
-                          ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                          : 'bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/20 active:scale-95'
-                      }`}
+                      href={`/events/${evt.slug}/register`}
+                      className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-600/20 active:scale-95"
                     >
-                      <span>{isSoldOut ? 'Sold Out' : 'Register Now'}</span>
-                      {!isSoldOut && <ArrowRight className="w-3.5 h-3.5" />}
+                      <span>Register Now</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </div>
