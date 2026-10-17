@@ -1,5 +1,26 @@
 import { ObjectId } from 'mongodb';
 
+export function deepCloneDoc(obj: any): any {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (obj instanceof ObjectId || (obj && (obj as any)._bsontype === 'ObjectID')) {
+    return new ObjectId(obj.toString());
+  }
+  if (obj instanceof Date) {
+    return new Date(obj.getTime());
+  }
+  if (obj instanceof RegExp) {
+    return new RegExp(obj.source, obj.flags);
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(deepCloneDoc);
+  }
+  const cloned: any = {};
+  for (const key of Object.keys(obj)) {
+    cloned[key] = deepCloneDoc(obj[key]);
+  }
+  return cloned;
+}
+
 export class InMemoryCursor {
   private items: any[];
 
@@ -69,11 +90,42 @@ export class InMemoryCollection {
         continue;
       }
 
+      // Handle RegExp
+      if (expected instanceof RegExp) {
+        if (typeof actual !== 'string' || !expected.test(actual)) return false;
+        continue;
+      }
+
       // Handle query operators
       if (expected && typeof expected === 'object') {
         const expObj = expected as any;
         if ('$in' in expObj && Array.isArray(expObj.$in)) {
-          if (!expObj.$in.includes(actual)) return false;
+          const matched = expObj.$in.some((item: any) => {
+            if (
+              item instanceof ObjectId ||
+              (item && (item as any)._bsontype === 'ObjectID') ||
+              actual instanceof ObjectId ||
+              (actual && (actual as any)._bsontype === 'ObjectID')
+            ) {
+              return item?.toString() === actual?.toString();
+            }
+            return item === actual;
+          });
+          if (!matched) return false;
+        }
+        if ('$nin' in expObj && Array.isArray(expObj.$nin)) {
+          const matched = expObj.$nin.some((item: any) => {
+            if (
+              item instanceof ObjectId ||
+              (item && (item as any)._bsontype === 'ObjectID') ||
+              actual instanceof ObjectId ||
+              (actual && (actual as any)._bsontype === 'ObjectID')
+            ) {
+              return item?.toString() === actual?.toString();
+            }
+            return item === actual;
+          });
+          if (matched) return false;
         }
         if ('$lt' in expObj) {
           if (!(actual < expObj.$lt)) return false;
@@ -88,7 +140,16 @@ export class InMemoryCollection {
           if (!(actual >= expObj.$gte)) return false;
         }
         if ('$ne' in expObj) {
-          if (actual === expObj.$ne) return false;
+          if (
+            expObj.$ne instanceof ObjectId ||
+            (expObj.$ne && (expObj.$ne as any)._bsontype === 'ObjectID') ||
+            actual instanceof ObjectId ||
+            (actual && (actual as any)._bsontype === 'ObjectID')
+          ) {
+            if (actual?.toString() === expObj.$ne?.toString()) return false;
+          } else if (actual === expObj.$ne) {
+            return false;
+          }
         }
         continue;
       }
@@ -104,15 +165,12 @@ export class InMemoryCollection {
 
   async findOne(query: any = {}): Promise<any | null> {
     const found = this.docs.find((d) => this.matchDoc(d, query));
-    return found ? JSON.parse(JSON.stringify(found), (k, v) => (k === '_id' ? new ObjectId(v) : k.endsWith('At') || k.endsWith('Date') ? new Date(v) : v)) : null;
+    return found ? deepCloneDoc(found) : null;
   }
 
   find(query: any = {}): InMemoryCursor {
     const matched = this.docs.filter((d) => this.matchDoc(d, query));
-    const cloned = matched.map((d) =>
-      JSON.parse(JSON.stringify(d), (k, v) => (k === '_id' ? new ObjectId(v) : k.endsWith('At') || k.endsWith('Date') ? new Date(v) : v))
-    );
-    return new InMemoryCursor(cloned);
+    return new InMemoryCursor(matched.map(deepCloneDoc));
   }
 
   async insertOne(doc: any): Promise<{ insertedId: ObjectId }> {
@@ -172,7 +230,7 @@ export class InMemoryCollection {
       }
     }
     doc.updatedAt = new Date();
-    return JSON.parse(JSON.stringify(doc), (k, v) => (k === '_id' ? new ObjectId(v) : k.endsWith('At') || k.endsWith('Date') ? new Date(v) : v));
+    return deepCloneDoc(doc);
   }
 
   async countDocuments(query: any = {}): Promise<number> {
