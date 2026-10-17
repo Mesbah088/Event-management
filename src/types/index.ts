@@ -54,6 +54,11 @@ export interface Registration {
   studentId?: string;
   department?: string;
   institution?: string;
+  trxId?: string;
+  senderPhone?: string;
+  paymentAmount?: string | number;
+  paymentMethod?: 'bKash' | 'Nagad';
+  paymentStatus?: 'PAID' | 'FREE' | 'PENDING';
   customFields?: Record<string, string>;
   ticketRef: string; // e.g. "UE-2026-X8Y1"
   tokenHash: string; // SHA-256 hex of 32-byte secret

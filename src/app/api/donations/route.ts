@@ -4,15 +4,26 @@ import { getDb } from '@/lib/db/mongodb';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    const { donorName, donorPhone, amount, trxId, reference, paymentMethod = 'bKash' } = body;
+    const {
+      donorName,
+      donorUniversity,
+      donorBatch,
+      donorPhone,
+      amount,
+      trxId,
+      reference,
+      paymentMethod = 'bKash',
+    } = body;
 
     const db = await getDb();
     const newDonation = {
       donorName: donorName ? String(donorName).trim() : 'Anonymous Donor',
+      donorUniversity: donorUniversity ? String(donorUniversity).trim() : undefined,
+      donorBatch: donorBatch ? String(donorBatch).trim() : undefined,
       donorPhone: donorPhone ? String(donorPhone).trim() : undefined,
       amount: amount ? Number(amount) || String(amount).trim() : undefined,
       trxId: trxId ? String(trxId).trim().toUpperCase() : undefined,
-      reference: reference ? String(reference).trim() : 'NIS Program',
+      reference: reference ? String(reference).trim() : 'Name_Versity_Batch',
       paymentMethod,
       eventSlug: 'niter-islamic-conference-2026',
       status: 'SUBMITTED',

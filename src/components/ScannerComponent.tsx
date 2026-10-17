@@ -435,11 +435,19 @@ export default function ScannerComponent({
                     <span className="font-bold font-mono">{result.details.attendeePhone}</span>
                   </div>
                 )}
+                {result.details?.trxId && (
+                  <div className="col-span-2 flex items-center justify-between pt-1 border-t border-emerald-200/50">
+                    <span className="font-semibold text-emerald-800">Payment TrxID:</span>
+                    <span className="font-bold font-mono text-emerald-950 bg-emerald-200/80 px-2 py-0.5 rounded text-[11px]">
+                      {result.details.trxId} {result.details?.paymentMethod ? `(${result.details.paymentMethod})` : ''}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="bg-emerald-600 text-white rounded-xl p-2.5 text-center text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Identity Verified — Allow Entry to Gate</span>
+                <span>Identity & Payment Verified — Allow Entry</span>
               </div>
             </div>
           )}
@@ -454,6 +462,9 @@ export default function ScannerComponent({
                 </p>
                 {result.details.attendeeName && (
                   <p className="text-rose-900 font-semibold">• Name: {result.details.attendeeName}</p>
+                )}
+                {result.details.trxId && (
+                  <p className="text-rose-800">• TrxID: {result.details.trxId}</p>
                 )}
                 {result.details.studentId && (
                   <p className="text-rose-800">• Student ID: {result.details.studentId}</p>

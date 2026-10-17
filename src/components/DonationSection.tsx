@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Heart,
   Copy,
@@ -11,38 +11,67 @@ import {
   AlertCircle,
   Tag,
   ExternalLink,
-  Smartphone,
   PhoneCall,
 } from 'lucide-react';
 
 interface DonationSectionProps {
   defaultOpenForm?: boolean;
+  initialName?: string;
+  initialUniversity?: string;
+  initialBatch?: string;
 }
 
-export default function DonationSection({ defaultOpenForm = false }: DonationSectionProps) {
+export default function DonationSection({
+  defaultOpenForm = false,
+  initialName = '',
+  initialUniversity = '',
+  initialBatch = '',
+}: DonationSectionProps) {
   const [copiedNumber, setCopiedNumber] = useState(false);
   const [copiedRef, setCopiedRef] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<'bkash' | 'nagad'>('bkash');
   const [showSubmitForm, setShowSubmitForm] = useState(defaultOpenForm);
   const [redirectToast, setRedirectToast] = useState<string | null>(null);
 
-  // Form State
-  const [donorName, setDonorName] = useState('');
+  // Reference Code & Form State: Name, Versity, Batch
+  const [donorName, setDonorName] = useState(initialName);
+  const [donorUniversity, setDonorUniversity] = useState(initialUniversity);
+  const [donorBatch, setDonorBatch] = useState(initialBatch);
   const [donorPhone, setDonorPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [trxId, setTrxId] = useState('');
-  const [reference, setReference] = useState('NIS Program');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Sync initial props when loaded asynchronously (e.g. from ticket sessionStorage)
+  useEffect(() => {
+    if (initialName && !donorName) setDonorName(initialName);
+    if (initialUniversity && !donorUniversity) setDonorUniversity(initialUniversity);
+    if (initialBatch && !donorBatch) setDonorBatch(initialBatch);
+  }, [initialName, initialUniversity, initialBatch]);
 
   // bKash & Nagad numbers (01518-793129)
   const bkashNumber = process.env.NEXT_PUBLIC_BKASH_NUMBER || '01518793129';
   const nagadNumber = process.env.NEXT_PUBLIC_NAGAD_NUMBER || '01518793129';
   const displayFormattedNumber = '01518-793129';
-  const autoReference = 'NIS Program';
 
   const activeNumber = selectedMethod === 'bkash' ? bkashNumber : nagadNumber;
+
+  // Format reference parts (replace internal spaces with underscore)
+  const formatRefPart = (val: string, fallback: string) => {
+    const trimmed = val.trim();
+    if (!trimmed) return fallback;
+    return trimmed.replace(/\s+/g, '_');
+  };
+
+  const hasEnteredRefInfo = Boolean(
+    donorName.trim() || donorUniversity.trim() || donorBatch.trim()
+  );
+
+  const computedReference = hasEnteredRefInfo
+    ? `${formatRefPart(donorName, 'Name')}_${formatRefPart(donorUniversity, 'Versity')}_${formatRefPart(donorBatch, 'Batch')}`
+    : 'Name_Versity_Batch';
 
   const handleCopyNumber = () => {
     if (typeof navigator !== 'undefined') {
@@ -54,7 +83,7 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
 
   const handleCopyRef = () => {
     if (typeof navigator !== 'undefined') {
-      navigator.clipboard.writeText(autoReference);
+      navigator.clipboard.writeText(computedReference);
       setCopiedRef(true);
       setTimeout(() => setCopiedRef(false), 3000);
     }
@@ -62,7 +91,7 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
 
   // Direct Mobile App Launch / Deep link Redirect
   const handleDirectAppRedirect = (method: 'bkash' | 'nagad') => {
-    // 1. Automatically copy number and reference to clipboard
+    // 1. Automatically copy number to clipboard
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(activeNumber);
       setCopiedNumber(true);
@@ -70,8 +99,8 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
     }
 
     const appName = method === 'bkash' ? 'bKash' : 'Nagad';
-    setRedirectToast(`নম্বর (${displayFormattedNumber}) কপি হয়েছে! ${appName} অ্যাপে Send Money করুন।`);
-    setTimeout(() => setRedirectToast(null), 5000);
+    setRedirectToast(`নম্বর (${displayFormattedNumber}) কপি হয়েছে! ${appName} অ্যাপে রেফারেন্সে "${computedReference}" দিয়ে Send Money করুন।`);
+    setTimeout(() => setRedirectToast(null), 6000);
 
     // 2. Mobile Deep-linking (Android Intent / iOS URL scheme)
     if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
@@ -111,10 +140,12 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           donorName: donorName.trim() || 'Anonymous Donor',
+          donorUniversity: donorUniversity.trim(),
+          donorBatch: donorBatch.trim(),
           donorPhone: donorPhone.trim(),
           amount: amount.trim(),
           trxId: trxId.trim().toUpperCase(),
-          reference: reference.trim() || 'NIS Program',
+          reference: computedReference,
           paymentMethod: selectedMethod === 'bkash' ? 'bKash' : 'Nagad',
         }),
       });
@@ -270,10 +301,10 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
             </div>
           )}
 
-          {/* Account Number & Auto Reference Card */}
-          <div className="bg-slate-900/90 rounded-2xl p-5 border border-slate-700/80 mb-6 shadow-xl space-y-4">
+          {/* Account Number & Reference Card */}
+          <div className="bg-slate-900/90 rounded-3xl p-5 sm:p-6 border border-slate-700/80 mb-6 shadow-xl space-y-4">
             {/* bKash / Nagad Number Box */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 bg-slate-800/70 rounded-xl border border-slate-700">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 bg-slate-800/80 rounded-2xl border border-slate-700">
               <div className="text-center sm:text-left">
                 <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
                   {selectedMethod === 'bkash' ? 'bKash Personal (Send Money)' : 'Nagad Personal (Send Money)'}
@@ -283,6 +314,7 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
                 </span>
               </div>
               <button
+                type="button"
                 onClick={handleCopyNumber}
                 className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center space-x-1.5 transition-transform active:scale-95 shadow-md shadow-emerald-600/30 shrink-0"
               >
@@ -300,39 +332,97 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
               </button>
             </div>
 
-            {/* Auto Reference Box */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 bg-emerald-950/60 rounded-xl border border-emerald-500/40">
-              <div className="text-center sm:text-left">
-                <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-bold block flex items-center space-x-1">
-                  <Tag className="w-3 h-3 text-emerald-400" />
-                  <span>Auto Reference (অটো রেফারেন্স)</span>
-                </span>
-                <div className="flex items-center space-x-2 mt-0.5">
-                  <span className="text-xl font-bold font-mono text-emerald-200 bg-emerald-900/80 px-2.5 py-0.5 rounded-lg border border-emerald-500/30">
-                    {autoReference}
+            {/* Reference Box with Name, Versity & Batch */}
+            <div className="p-4 sm:p-5 bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-950 rounded-2xl border border-emerald-500/40 shadow-inner space-y-3.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-800/50 pb-3">
+                <div>
+                  <span className="text-xs uppercase tracking-wider text-emerald-400 font-bold flex items-center space-x-1.5">
+                    <Tag className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>রেফারেন্স কোড (Reference Code): Name, Versity & Batch</span>
                   </span>
-                  <span className="text-[11px] text-emerald-300 hidden md:inline">
-                    (বিকাশে রেফারেন্সে এই নামটি দিন)
+                  <span className="text-[11px] text-emerald-200/90 block mt-0.5">
+                    বিকাশ বা নগদে Send Money করার সময় রেফারেন্সে আপনার নাম, ভার্সিটি ও ব্যাচ দিন
                   </span>
+                </div>
+                <div className="text-[11px] text-emerald-300 bg-emerald-900/70 px-2.5 py-1 rounded-lg border border-emerald-500/30 shrink-0 font-medium self-start sm:self-auto">
+                  ফরম্যাট: <span className="font-mono font-bold text-white">[Name]_[Versity]_[Batch]</span>
                 </div>
               </div>
 
-              <button
-                onClick={handleCopyRef}
-                className="px-4 py-2.5 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white font-bold text-xs flex items-center space-x-1.5 transition-transform active:scale-95 border border-emerald-500/50 shadow-md shrink-0"
-              >
-                {copiedRef ? (
-                  <>
-                    <Check className="w-4 h-4 text-emerald-200" />
-                    <span>রেফারেন্স কপি হয়েছে!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4 text-emerald-200" />
-                    <span>কপি রেফারেন্স: NIS Program</span>
-                  </>
-                )}
-              </button>
+              {/* 3 Interactive Quick Fields for Name, Versity, Batch */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                <div>
+                  <label className="block text-[11px] text-slate-300 font-semibold mb-1">
+                    ১. আপনার নাম (Name)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Sakib"
+                    value={donorName}
+                    onChange={(e) => setDonorName(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] text-slate-300 font-semibold mb-1">
+                    ২. ভার্সিটি / প্রতিষ্ঠান (Versity)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. NITER / DU"
+                    value={donorUniversity}
+                    onChange={(e) => setDonorUniversity(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] text-slate-300 font-semibold mb-1">
+                    ৩. ব্যাচ (Batch)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 13"
+                    value={donorBatch}
+                    onChange={(e) => setDonorBatch(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  />
+                </div>
+              </div>
+
+              {/* Dynamic Reference Output & Copy Action */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 bg-slate-950/80 rounded-xl border border-emerald-500/40 mt-2">
+                <div className="text-center sm:text-left">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                    আপনার তৈরি হওয়া রেফারেন্স কোড:
+                  </span>
+                  <div className="flex items-center space-x-2 mt-0.5">
+                    <span className="text-lg sm:text-xl font-bold font-mono text-emerald-300 tracking-wide bg-emerald-950/90 px-2.5 py-0.5 rounded-lg border border-emerald-500/40">
+                      {computedReference}
+                    </span>
+                    <span className="text-[11px] text-emerald-400/90 hidden md:inline">
+                      (বিকাশ/নগদ রেফারেন্সে পেস্ট করুন)
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleCopyRef}
+                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center space-x-1.5 transition-transform active:scale-95 shadow-md shadow-emerald-600/30 shrink-0"
+                >
+                  {copiedRef ? (
+                    <>
+                      <Check className="w-4 h-4 text-white" />
+                      <span>রেফারেন্স কপি হয়েছে!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4 text-white" />
+                      <span>কপি রেফারেন্স ({computedReference})</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-1 text-xs text-slate-300">
@@ -358,7 +448,7 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
             <div className="bg-slate-900/50 p-3.5 rounded-xl border border-slate-800 text-center">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold inline-flex items-center justify-center mb-1 text-[11px]">২</span>
               <p className="font-semibold text-white">Send Money করুন</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">রেফারেন্সে <span className="text-emerald-400 font-bold font-mono">NIS Program</span> দিয়ে সাধ্যমতো অর্থ পাঠান।</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">রেফারেন্সে আপনার <span className="text-emerald-400 font-bold font-mono">Name_Versity_Batch</span> (যেমন: Sakib_NITER_13) দিয়ে হাদিয়া পাঠান।</p>
             </div>
             <div className="bg-slate-900/50 p-3.5 rounded-xl border border-slate-800 text-center">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold inline-flex items-center justify-center mb-1 text-[11px]">৩</span>
@@ -400,17 +490,43 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
               )}
 
               <form onSubmit={handleDonationSubmit} className="space-y-3 max-w-md mx-auto">
-                <div>
-                  <label className="block text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-1">
-                    আপনার নাম (Donor Name)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Abdullah / Anonymous"
-                    value={donorName}
-                    onChange={(e) => setDonorName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-1">
+                      নাম (Name)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Sakib"
+                      value={donorName}
+                      onChange={(e) => setDonorName(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-1">
+                      ভার্সিটি (Versity)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. NITER / DU"
+                      value={donorUniversity}
+                      onChange={(e) => setDonorUniversity(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-1">
+                      ব্যাচ (Batch)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 13"
+                      value={donorBatch}
+                      onChange={(e) => setDonorBatch(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -455,12 +571,12 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
                   </div>
                   <div>
                     <label className="block text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-1">
-                      Reference Code
+                      Reference Code (Auto)
                     </label>
                     <input
                       type="text"
                       readOnly
-                      value={reference}
+                      value={computedReference}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-emerald-500/40 text-xs text-emerald-300 font-mono font-bold cursor-not-allowed"
                     />
                   </div>

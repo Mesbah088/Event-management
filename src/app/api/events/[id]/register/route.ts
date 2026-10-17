@@ -39,8 +39,37 @@ export async function POST(
       );
     }
 
-    const { name, email, phone, attendeeType, batch, studentId, department, institution } = validated.data;
+    const {
+      name,
+      email,
+      phone,
+      attendeeType = 'EXTERNAL_STUDENT',
+      batch,
+      studentId,
+      department,
+      institution,
+      trxId,
+      senderPhone,
+      paymentAmount,
+      paymentMethod,
+    } = validated.data;
     const normalizedEmail = email.trim().toLowerCase();
+
+    // Validate external university requirements
+    if (attendeeType === 'EXTERNAL_STUDENT') {
+      if (!institution || !institution.trim()) {
+        return NextResponse.json(
+          { error: 'বিশ্ববিদ্যালয়ের নাম (University name) প্রদান করা আবশ্যক।' },
+          { status: 400 }
+        );
+      }
+      if (!trxId || !trxId.trim()) {
+        return NextResponse.json(
+          { error: 'বহিরাগত শিক্ষার্থীদের জন্য Transaction ID (TrxID) প্রদান করা আবশ্যক।' },
+          { status: 400 }
+        );
+      }
+    }
 
     const db = await getDb();
 
@@ -115,18 +144,27 @@ export async function POST(
       attendeeName: name.trim(),
       attendeeEmail: normalizedEmail,
       attendeePhone: phone ? phone.trim() : undefined,
-      attendeeType: attendeeType || 'NITER_STUDENT',
+      attendeeType: attendeeType || 'EXTERNAL_STUDENT',
       batch: batch ? batch.trim() : undefined,
       studentId: studentId ? studentId.trim() : undefined,
       department: department ? department.trim() : undefined,
-      institution: institution ? institution.trim() : undefined,
+      institution: institution ? institution.trim() : (attendeeType === 'NITER_STUDENT' ? 'NITER' : undefined),
+      trxId: trxId ? trxId.trim().toUpperCase() : undefined,
+      senderPhone: senderPhone ? senderPhone.trim() : undefined,
+      paymentAmount: paymentAmount ? paymentAmount.trim() : undefined,
+      paymentMethod: (paymentMethod as any) || (trxId ? 'bKash' : undefined),
+      paymentStatus: trxId ? 'PAID' : (attendeeType === 'EXTERNAL_STUDENT' ? 'PAID' : 'FREE'),
       customFields: {
-        attendeeType: attendeeType || 'NITER_STUDENT',
+        attendeeType: attendeeType || 'EXTERNAL_STUDENT',
         ...(phone ? { phone: phone.trim() } : {}),
         ...(batch ? { batch: batch.trim() } : {}),
         ...(studentId ? { studentId: studentId.trim() } : {}),
         ...(department ? { department: department.trim() } : {}),
         ...(institution ? { institution: institution.trim() } : {}),
+        ...(trxId ? { trxId: trxId.trim().toUpperCase() } : {}),
+        ...(senderPhone ? { senderPhone: senderPhone.trim() } : {}),
+        ...(paymentAmount ? { paymentAmount: paymentAmount.trim() } : {}),
+        ...(paymentMethod ? { paymentMethod } : {}),
       },
       ticketRef,
       tokenHash,
@@ -190,6 +228,24 @@ export async function POST(
       console.error('Background email dispatch error:', emailErr);
     });
 
+    // Optional: Sync payment record to donations collection for financial ledger
+    if (trxId) {
+      db.collection('donations').insertOne({
+        donorName: name.trim(),
+        donorUniversity: institution ? institution.trim() : (attendeeType === 'NITER_STUDENT' ? 'NITER' : 'External'),
+        donorBatch: batch ? batch.trim() : '',
+        donorPhone: senderPhone ? senderPhone.trim() : (phone ? phone.trim() : ''),
+        amount: paymentAmount ? (Number(paymentAmount) || paymentAmount) : 'Registration Fee',
+        trxId: trxId.trim().toUpperCase(),
+        reference: `${name.trim()}_${institution ? institution.trim() : 'External'}_${batch ? batch.trim() : ''}`.replace(/\s+/g, '_'),
+        paymentMethod: paymentMethod || 'bKash',
+        eventSlug: event.slug,
+        ticketRef,
+        status: 'SUBMITTED',
+        createdAt: now,
+      }).catch(err => console.error('Donation record sync err:', err));
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Registration successful! Your ticket has been generated.',
@@ -198,11 +254,14 @@ export async function POST(
         attendeeName: name.trim(),
         attendeeEmail: normalizedEmail,
         attendeePhone: phone ? phone.trim() : '',
-        attendeeType: attendeeType || 'NITER_STUDENT',
+        attendeeType: attendeeType || 'EXTERNAL_STUDENT',
         batch: batch ? batch.trim() : '',
         studentId: studentId ? studentId.trim() : '',
         department: department ? department.trim() : '',
-        institution: institution ? institution.trim() : '',
+        institution: institution ? institution.trim() : (attendeeType === 'NITER_STUDENT' ? 'NITER' : ''),
+        trxId: trxId ? trxId.trim().toUpperCase() : '',
+        paymentMethod: paymentMethod || (trxId ? 'bKash' : ''),
+        paymentStatus: trxId ? 'PAID' : (attendeeType === 'EXTERNAL_STUDENT' ? 'PAID' : 'FREE'),
         rawToken, // Provided once on success screen for instant display & wallet download
         qrDataUrl,
         eventTitle: event.title,

@@ -129,6 +129,9 @@ export async function POST(request: NextRequest) {
           studentId: updatedDoc.studentId || updatedDoc.customFields?.studentId,
           department: updatedDoc.department || updatedDoc.customFields?.department,
           institution: updatedDoc.institution || updatedDoc.customFields?.institution,
+          trxId: updatedDoc.trxId || updatedDoc.customFields?.trxId,
+          paymentMethod: updatedDoc.paymentMethod || updatedDoc.customFields?.paymentMethod,
+          paymentStatus: updatedDoc.paymentStatus || (updatedDoc.trxId ? 'PAID' : undefined),
           checkedInAt: now,
           gateId,
         },
@@ -166,6 +169,8 @@ export async function POST(request: NextRequest) {
           studentId: existingRegistration.studentId || existingRegistration.customFields?.studentId,
           department: existingRegistration.department || existingRegistration.customFields?.department,
           institution: existingRegistration.institution || existingRegistration.customFields?.institution,
+          trxId: existingRegistration.trxId || existingRegistration.customFields?.trxId,
+          paymentMethod: existingRegistration.paymentMethod || existingRegistration.customFields?.paymentMethod,
         };
       } else if (existingRegistration.status === 'CANCELLED') {
         failureOutcome = 'CANCELLED';

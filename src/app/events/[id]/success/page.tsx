@@ -29,6 +29,9 @@ interface TicketData {
   studentId?: string;
   department?: string;
   institution?: string;
+  trxId?: string;
+  paymentMethod?: string;
+  paymentStatus?: string;
   qrDataUrl: string;
   eventTitle: string;
   venue: string;
@@ -199,6 +202,14 @@ function SuccessContent({ eventSlug }: { eventSlug: string }) {
                 <span className="font-semibold text-slate-700 text-right">{ticket.attendeeEmail}</span>
               </div>
             )}
+            {ticket?.trxId && (
+              <div className="flex justify-between items-center bg-emerald-50 p-2 rounded-lg border border-emerald-200">
+                <span className="text-emerald-800 font-semibold">Payment TrxID:</span>
+                <span className="font-mono font-bold text-emerald-900 text-right">
+                  {ticket.trxId} {ticket.paymentMethod ? `(${ticket.paymentMethod})` : ''}
+                </span>
+              </div>
+            )}
             {ticket?.startDateFormatted && (
               <div className="flex justify-between items-center">
                 <span className="text-slate-500 font-medium">Date & Time:</span>
@@ -243,7 +254,15 @@ function SuccessContent({ eventSlug }: { eventSlug: string }) {
         </div>
 
         {/* Voluntary Conference Donation Section */}
-        <DonationSection />
+        <DonationSection
+          initialName={ticket?.attendeeName || ''}
+          initialUniversity={
+            ticket?.attendeeType === 'NITER_STUDENT' || ticket?.attendeeType === 'NITER_ALUMNI'
+              ? 'NITER'
+              : ticket?.institution || ''
+          }
+          initialBatch={ticket?.batch || ''}
+        />
 
         <div className="text-center mt-6">
           <Link

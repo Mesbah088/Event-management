@@ -9,11 +9,15 @@ export const registrationSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
   email: z.string().trim().email('Invalid email address').toLowerCase(),
   phone: z.string().trim().max(25, 'Phone number is too long').optional().or(z.literal('')),
-  attendeeType: z.enum(['NITER_STUDENT', 'NITER_ALUMNI', 'EXTERNAL_STUDENT', 'GUEST']).default('NITER_STUDENT'),
+  attendeeType: z.enum(['NITER_STUDENT', 'NITER_ALUMNI', 'EXTERNAL_STUDENT', 'GUEST']).default('EXTERNAL_STUDENT'),
   batch: z.string().trim().max(50).optional().or(z.literal('')),
   studentId: z.string().trim().max(50).optional().or(z.literal('')),
   department: z.string().trim().max(100).optional().or(z.literal('')),
   institution: z.string().trim().max(150).optional().or(z.literal('')),
+  trxId: z.string().trim().max(50).optional().or(z.literal('')),
+  senderPhone: z.string().trim().max(25).optional().or(z.literal('')),
+  paymentAmount: z.string().trim().max(20).optional().or(z.literal('')),
+  paymentMethod: z.enum(['bKash', 'Nagad']).optional().or(z.literal('')),
 });
 
 export const eventSchema = z.object({
