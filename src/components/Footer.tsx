@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Lock, QrCode, Sparkles, Award } from 'lucide-react';
-import { SPONSORS } from '@/components/SponsorSection';
+import { SPONSORS } from '@/data/sponsors';
+
 
 export default function Footer() {
   return (
