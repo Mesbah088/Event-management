@@ -7,11 +7,12 @@ import {
   Check,
   Send,
   Sparkles,
-  PhoneCall,
   CheckCircle2,
   AlertCircle,
-  Bookmark,
   Tag,
+  ExternalLink,
+  Smartphone,
+  PhoneCall,
 } from 'lucide-react';
 
 interface DonationSectionProps {
@@ -23,6 +24,7 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
   const [copiedRef, setCopiedRef] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<'bkash' | 'nagad'>('bkash');
   const [showSubmitForm, setShowSubmitForm] = useState(defaultOpenForm);
+  const [redirectToast, setRedirectToast] = useState<string | null>(null);
 
   // Form State
   const [donorName, setDonorName] = useState('');
@@ -55,6 +57,46 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
       navigator.clipboard.writeText(autoReference);
       setCopiedRef(true);
       setTimeout(() => setCopiedRef(false), 3000);
+    }
+  };
+
+  // Direct Mobile App Launch / Deep link Redirect
+  const handleDirectAppRedirect = (method: 'bkash' | 'nagad') => {
+    // 1. Automatically copy number and reference to clipboard
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(activeNumber);
+      setCopiedNumber(true);
+      setTimeout(() => setCopiedNumber(false), 3000);
+    }
+
+    const appName = method === 'bkash' ? 'bKash' : 'Nagad';
+    setRedirectToast(`নম্বর (${displayFormattedNumber}) কপি হয়েছে! ${appName} অ্যাপে Send Money করুন।`);
+    setTimeout(() => setRedirectToast(null), 5000);
+
+    // 2. Mobile Deep-linking (Android Intent / iOS URL scheme)
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (method === 'bkash') {
+        if (isAndroid) {
+          window.location.href = 'intent://#Intent;package=com.bKash.customerapp;scheme=bkash;end';
+          setTimeout(() => {
+            window.location.href = 'bkash://';
+          }, 300);
+        } else if (isIOS) {
+          window.location.href = 'bkash://';
+        }
+      } else {
+        if (isAndroid) {
+          window.location.href = 'intent://#Intent;package=com.konasl.nagad;scheme=nagad;end';
+          setTimeout(() => {
+            window.location.href = 'nagad://';
+          }, 300);
+        } else if (isIOS) {
+          window.location.href = 'nagad://';
+        }
+      }
     }
   };
 
@@ -127,33 +169,106 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
             </p>
           </div>
 
-          {/* Payment Method Switcher (bKash & Nagad) */}
-          <div className="flex justify-center mb-6">
-            <div className="bg-slate-900/80 p-1 rounded-2xl border border-slate-700 inline-flex space-x-1">
+          {/* Direct App Redirect / Logo Trigger Cards */}
+          <div className="mb-6">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 block text-center mb-3">
+              সরাসরি অ্যাপে রিডাইরেক্ট করুন (Direct Mobile App Launch)
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* bKash Direct Button Card */}
               <button
                 type="button"
-                onClick={() => setSelectedMethod('bkash')}
-                className={`px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 ${
+                onClick={() => {
+                  setSelectedMethod('bkash');
+                  handleDirectAppRedirect('bkash');
+                }}
+                className={`p-4 rounded-2xl border transition-all text-left flex items-center justify-between group active:scale-95 shadow-lg ${
                   selectedMethod === 'bkash'
-                    ? 'bg-[#E2136E] text-white shadow-lg shadow-[#E2136E]/30 scale-[1.02]'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-gradient-to-r from-[#E2136E]/20 to-[#E2136E]/40 border-[#E2136E] ring-2 ring-[#E2136E]/50'
+                    : 'bg-slate-900/80 border-slate-700 hover:border-[#E2136E]/60'
                 }`}
               >
-                <span>বিকাশ (bKash)</span>
+                <div className="flex items-center space-x-3.5">
+                  {/* bKash Official Icon SVG */}
+                  <div className="w-12 h-12 rounded-xl bg-[#E2136E] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#E2136E]/40 font-extrabold text-base tracking-tighter">
+                    <svg viewBox="0 0 100 100" className="w-8 h-8 fill-white">
+                      <path d="M48.2 26.5L34.1 63.8l20.4-7.4 12.5-29.9z" />
+                      <path d="M14.7 32.2l20.8 14.3-1.4 3.7-19.4-18z" opacity="0.9" />
+                      <path d="M85.3 46.2l-22.1-5.7 3.8 9.3 18.3-3.6z" opacity="0.9" />
+                      <path d="M43.9 66.8l-8.6 15.7 13.9-9.2z" opacity="0.8" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-base font-extrabold text-white block group-hover:text-[#E2136E] transition-colors">
+                      bKash (বিকাশ)
+                    </span>
+                    <span className="text-xs text-slate-300 block">
+                      ক্লিক করলেই সরাসরি বিকাশ অ্যাপ খুলবে
+                    </span>
+                  </div>
+                </div>
+
+                <div className="px-3 py-1.5 rounded-xl bg-[#E2136E] text-white text-[11px] font-bold flex items-center space-x-1 shrink-0 group-hover:scale-105 transition-transform shadow-sm">
+                  <span>Open App</span>
+                  <ExternalLink className="w-3 h-3" />
+                </div>
               </button>
+
+              {/* Nagad Direct Button Card */}
               <button
                 type="button"
-                onClick={() => setSelectedMethod('nagad')}
-                className={`px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 ${
+                onClick={() => {
+                  setSelectedMethod('nagad');
+                  handleDirectAppRedirect('nagad');
+                }}
+                className={`p-4 rounded-2xl border transition-all text-left flex items-center justify-between group active:scale-95 shadow-lg ${
                   selectedMethod === 'nagad'
-                    ? 'bg-[#F7941D] text-white shadow-lg shadow-[#F7941D]/30 scale-[1.02]'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-gradient-to-r from-[#F7941D]/20 to-[#ED1C24]/30 border-[#F7941D] ring-2 ring-[#F7941D]/50'
+                    : 'bg-slate-900/80 border-slate-700 hover:border-[#F7941D]/60'
                 }`}
               >
-                <span>নগদ (Nagad)</span>
+                <div className="flex items-center space-x-3.5">
+                  {/* Nagad Official Icon SVG */}
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#F7941D] to-[#ED1C24] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#F7941D]/40 font-extrabold text-base">
+                    <svg viewBox="0 0 100 100" className="w-8 h-8 fill-white">
+                      <path d="M50 15c-11 15-22 30-22 43 0 13 10 24 22 24s22-11 22-24c0-13-11-28-22-43zm0 55c-6 0-11-5-11-12 0-8 6-17 11-25 5 8 11 17 11 25 0 7-5 12-11 12z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-base font-extrabold text-white block group-hover:text-[#F7941D] transition-colors">
+                      Nagad (নগদ)
+                    </span>
+                    <span className="text-xs text-slate-300 block">
+                      ক্লিক করলেই সরাসরি নগদ অ্যাপ খুলবে
+                    </span>
+                  </div>
+                </div>
+
+                <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#F7941D] to-[#ED1C24] text-white text-[11px] font-bold flex items-center space-x-1 shrink-0 group-hover:scale-105 transition-transform shadow-sm">
+                  <span>Open App</span>
+                  <ExternalLink className="w-3 h-3" />
+                </div>
               </button>
             </div>
           </div>
+
+          {/* Toast Notification when app launch / copy triggered */}
+          {redirectToast && (
+            <div className="mb-6 p-4 rounded-2xl bg-emerald-600/90 border border-emerald-400 text-white text-xs font-semibold flex items-center justify-between shadow-xl animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-center space-x-2.5">
+                <CheckCircle2 className="w-5 h-5 text-white shrink-0" />
+                <span>{redirectToast}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRedirectToast(null)}
+                className="text-white/80 hover:text-white text-xs underline ml-2"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
 
           {/* Account Number & Auto Reference Card */}
           <div className="bg-slate-900/90 rounded-2xl p-5 border border-slate-700/80 mb-6 shadow-xl space-y-4">
@@ -220,22 +335,30 @@ export default function DonationSection({ defaultOpenForm = false }: DonationSec
               </button>
             </div>
 
-            <p className="text-xs text-slate-300 text-center pt-1">
-              💡 বিকাশ অ্যাপে Send Money করার সময় Reference ঘরে <span className="text-emerald-400 font-bold font-mono">NIS Program</span> লিখে দিন।
-            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-1 text-xs text-slate-300">
+              <span>💡 বাটন চাপলে বিকাশ/নগদ অ্যাপ চালু হবে এবং নম্বর অটো কপি হয়ে যাবে।</span>
+              <span className="text-slate-500">|</span>
+              <a
+                href={selectedMethod === 'bkash' ? 'tel:*247#' : 'tel:*167#'}
+                className="text-emerald-400 hover:text-emerald-300 font-semibold underline inline-flex items-center space-x-1"
+              >
+                <PhoneCall className="w-3 h-3" />
+                <span>বা ডায়াল করুন {selectedMethod === 'bkash' ? '*247#' : '*167#'} (USSD)</span>
+              </a>
+            </div>
           </div>
 
           {/* Quick Steps Guide */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300 mb-6">
             <div className="bg-slate-900/50 p-3.5 rounded-xl border border-slate-800 text-center">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold inline-flex items-center justify-center mb-1 text-[11px]">১</span>
-              <p className="font-semibold text-white">নম্বর ও রেফারেন্স কপি</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">বিকাশ নম্বর ও রেফারেন্স <span className="text-emerald-400 font-mono font-bold">NIS Program</span> কপি করুন।</p>
+              <p className="font-semibold text-white">লোগোতে ক্লিক করুন</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">বিকাশ বা নগদ বাটনে চাপ দিলে অটো নম্বর কপি হয়ে অ্যাপ ওপেন হবে।</p>
             </div>
             <div className="bg-slate-900/50 p-3.5 rounded-xl border border-slate-800 text-center">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold inline-flex items-center justify-center mb-1 text-[11px]">২</span>
               <p className="font-semibold text-white">Send Money করুন</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">আপনার সাধ্যমতো যে কোনো পরিমাণ অর্থ পাঠিয়ে দিন।</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">রেফারেন্সে <span className="text-emerald-400 font-bold font-mono">NIS Program</span> দিয়ে সাধ্যমতো অর্থ পাঠান।</p>
             </div>
             <div className="bg-slate-900/50 p-3.5 rounded-xl border border-slate-800 text-center">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold inline-flex items-center justify-center mb-1 text-[11px]">৩</span>
