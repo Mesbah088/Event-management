@@ -107,7 +107,7 @@ export async function POST(
     // Generate cryptographic credentials
     const rawToken = generateTicketToken();
     const tokenHash = hashTicketToken(rawToken);
-    const ticketRef = generateTicketReference('UE');
+    const ticketRef = generateTicketReference('NIS');
 
     // Create registration document
     const newRegistration: Registration = {

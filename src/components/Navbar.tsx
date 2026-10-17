@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { QrCode, Shield, Camera, LogOut, User as UserIcon } from 'lucide-react';
+import { QrCode, Shield, Camera, LogOut, User as UserIcon, Heart } from 'lucide-react';
 
 interface SessionInfo {
   authenticated: boolean;
@@ -56,6 +56,14 @@ export default function Navbar() {
             }`}
           >
             Events
+          </Link>
+
+          <Link
+            href="/#donation-section"
+            className="px-3 py-2 rounded-lg text-sm font-semibold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 transition-colors flex items-center space-x-1.5"
+          >
+            <Heart className="w-3.5 h-3.5 fill-emerald-600 text-emerald-600" />
+            <span>অনুদান (Donate)</span>
           </Link>
 
           {session?.authenticated && (

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import DonationSection from '@/components/DonationSection';
 import {
   Calendar,
   MapPin,
@@ -209,6 +210,9 @@ export default async function EventDetailsPage({
             <li>Please arrive at least 15 minutes prior to the scheduled start time for security scanning.</li>
           </ul>
         </div>
+
+        {/* Voluntary Conference Donation Section */}
+        <DonationSection />
       </main>
 
       <Footer />

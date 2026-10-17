@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import DonationSection from '@/components/DonationSection';
 import {
   CheckCircle,
   Download,
@@ -241,7 +242,10 @@ function SuccessContent({ eventSlug }: { eventSlug: string }) {
           </button>
         </div>
 
-        <div className="text-center">
+        {/* Voluntary Conference Donation Section */}
+        <DonationSection />
+
+        <div className="text-center mt-6">
           <Link
             href="/"
             className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-600 hover:text-brand-600 transition-colors"

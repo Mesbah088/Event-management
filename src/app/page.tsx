@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import DonationSection from '@/components/DonationSection';
 import { Calendar, MapPin, Users, ArrowRight, ShieldCheck, QrCode, Sparkles } from 'lucide-react';
 import { getDb } from '@/lib/db/mongodb';
 import { Event } from '@/types';
@@ -176,6 +177,9 @@ export default async function HomePage() {
             })}
           </div>
         )}
+
+        {/* Voluntary Conference Donation Section */}
+        <DonationSection />
       </main>
 
       <Footer />
