@@ -117,8 +117,20 @@ export default function ScannerComponent({
       const parsed = JSON.parse(decodedText);
       if (parsed.t) tokenToSubmit = parsed.t;
       else if (parsed.token) tokenToSubmit = parsed.token;
+      else if (parsed.ticketRef) tokenToSubmit = parsed.ticketRef;
     } catch (e) {
       // Raw string token
+    }
+
+    // If scanned text is a URL, extract token or ticketRef parameter
+    if (tokenToSubmit.startsWith('http://') || tokenToSubmit.startsWith('https://')) {
+      try {
+        const urlObj = new URL(tokenToSubmit);
+        const tokParam = urlObj.searchParams.get('token');
+        const refParam = urlObj.searchParams.get('ticketRef') || urlObj.searchParams.get('ref');
+        if (tokParam) tokenToSubmit = tokParam;
+        else if (refParam) tokenToSubmit = refParam;
+      } catch (e) {}
     }
 
     // Debounce duplicate scans of the exact same token within 3 seconds
@@ -420,7 +432,7 @@ export default function ScannerComponent({
                 type="text"
                 value={manualCode}
                 onChange={(e) => setManualCode(e.target.value)}
-                placeholder="e.g. 32-char token"
+                placeholder="e.g. UE-2026-8AD9F8 or raw token"
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-500"
                 autoFocus
                 required

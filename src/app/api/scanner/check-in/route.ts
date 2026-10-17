@@ -55,20 +55,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Event not found.' }, { status: 404 });
     }
 
+    // Clean input and extract token or reference if URL was provided
+    let cleanToken = token.trim();
+    if (cleanToken.startsWith('http://') || cleanToken.startsWith('https://')) {
+      try {
+        const urlObj = new URL(cleanToken);
+        const tokParam = urlObj.searchParams.get('token');
+        const refParam = urlObj.searchParams.get('ticketRef') || urlObj.searchParams.get('ref');
+        if (tokParam) cleanToken = tokParam;
+        else if (refParam) cleanToken = refParam;
+      } catch {}
+    }
+
     // Hash the presented raw token
-    const tokenHash = hashTicketToken(token);
+    const tokenHash = hashTicketToken(cleanToken);
+    const upperRef = cleanToken.toUpperCase();
     const now = new Date();
 
     // 2. CRITICAL ATOMIC CONDITIONAL UPDATE:
     // Update the ticket from ISSUED to USED ONLY IF:
-    // - tokenHash matches
+    // - (tokenHash matches OR ticketRef matches)
     // - eventId matches
     // - status is still 'ISSUED'
     const updateResult = await db.collection<Registration>('registrations').findOneAndUpdate(
       {
-        tokenHash,
         eventId: eventObjectId,
         status: 'ISSUED',
+        $or: [
+          { tokenHash },
+          { ticketRef: upperRef },
+        ],
       },
       {
         $set: {
@@ -113,8 +129,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Case B: Atomic update did not match. Determine failure reason safely.
-    // Query by tokenHash to identify specific reason without race vulnerability
-    const existingRegistration = await db.collection<Registration>('registrations').findOne({ tokenHash });
+    // Query by tokenHash or ticketRef to identify specific reason without race vulnerability
+    const existingRegistration = await db.collection<Registration>('registrations').findOne({
+      $or: [
+        { tokenHash },
+        { ticketRef: upperRef },
+      ],
+    });
 
     let failureOutcome: ScanOutcome = 'INVALID';
     let failureMessage = 'INVALID — ENTRY DENIED (Unrecognized Ticket)';
