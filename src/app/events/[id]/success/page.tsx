@@ -22,6 +22,12 @@ interface TicketData {
   ticketRef: string;
   attendeeName: string;
   attendeeEmail: string;
+  attendeePhone?: string;
+  attendeeType?: string;
+  batch?: string;
+  studentId?: string;
+  department?: string;
+  institution?: string;
   qrDataUrl: string;
   eventTitle: string;
   venue: string;
@@ -135,27 +141,71 @@ function SuccessContent({ eventSlug }: { eventSlug: string }) {
           </div>
 
           {/* Attendee Details */}
-          <div className="pt-4 border-t border-slate-200 space-y-3 text-xs sm:text-sm">
+          <div className="pt-4 border-t border-slate-200 space-y-2.5 text-xs sm:text-sm">
             {ticket?.attendeeName && (
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-slate-500 font-medium">Attendee:</span>
-                <span className="font-bold text-slate-900">{ticket.attendeeName}</span>
+                <span className="font-bold text-slate-900 text-right">{ticket.attendeeName}</span>
+              </div>
+            )}
+            {ticket?.attendeeType && (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-medium">Category:</span>
+                <span className="font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded text-xs text-right">
+                  {ticket.attendeeType === 'NITER_STUDENT'
+                    ? '🎓 NITER Student'
+                    : ticket.attendeeType === 'NITER_ALUMNI'
+                    ? '🎓 NITER Alumni'
+                    : ticket.attendeeType === 'EXTERNAL_STUDENT'
+                    ? '🏛️ External University'
+                    : '👤 Guest Attendee'}
+                </span>
+              </div>
+            )}
+            {ticket?.studentId && (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-medium">Student ID:</span>
+                <span className="font-mono font-bold text-slate-900 text-right">{ticket.studentId}</span>
+              </div>
+            )}
+            {ticket?.batch && (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-medium">Batch:</span>
+                <span className="font-semibold text-slate-800 text-right">{ticket.batch}</span>
+              </div>
+            )}
+            {ticket?.department && (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-medium">Department:</span>
+                <span className="font-semibold text-slate-800 text-right">{ticket.department}</span>
+              </div>
+            )}
+            {ticket?.institution && ticket.institution !== 'NITER' && (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-medium">Institution:</span>
+                <span className="font-semibold text-slate-800 text-right">{ticket.institution}</span>
+              </div>
+            )}
+            {ticket?.attendeePhone && (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-medium">Contact:</span>
+                <span className="font-mono font-semibold text-slate-800 text-right">{ticket.attendeePhone}</span>
               </div>
             )}
             {ticket?.attendeeEmail && (
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-slate-500 font-medium">Email:</span>
-                <span className="font-semibold text-slate-700">{ticket.attendeeEmail}</span>
+                <span className="font-semibold text-slate-700 text-right">{ticket.attendeeEmail}</span>
               </div>
             )}
             {ticket?.startDateFormatted && (
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-slate-500 font-medium">Date & Time:</span>
                 <span className="font-semibold text-slate-700 text-right">{ticket.startDateFormatted}</span>
               </div>
             )}
             {ticket?.venue && (
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-slate-500 font-medium">Venue:</span>
                 <span className="font-semibold text-slate-700 text-right">{ticket.venue}</span>
               </div>

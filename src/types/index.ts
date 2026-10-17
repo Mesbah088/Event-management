@@ -41,12 +41,19 @@ export interface Event {
 export type TicketStatus = 'ISSUED' | 'USED' | 'CANCELLED';
 export type EmailDeliveryStatus = 'PENDING' | 'SENT' | 'FAILED' | 'DEV_MOCKED';
 
+export type AttendeeType = 'NITER_STUDENT' | 'NITER_ALUMNI' | 'EXTERNAL_STUDENT' | 'GUEST';
+
 export interface Registration {
   _id?: ObjectId;
   eventId: ObjectId;
   attendeeName: string;
   attendeeEmail: string; // Normalized lowercase
   attendeePhone?: string;
+  attendeeType?: AttendeeType | string;
+  batch?: string;
+  studentId?: string;
+  department?: string;
+  institution?: string;
   customFields?: Record<string, string>;
   ticketRef: string; // e.g. "UE-2026-X8Y1"
   tokenHash: string; // SHA-256 hex of 32-byte secret

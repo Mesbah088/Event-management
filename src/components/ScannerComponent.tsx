@@ -12,6 +12,11 @@ import {
   Keyboard,
   ShieldCheck,
   Building,
+  User,
+  Phone,
+  GraduationCap,
+  School,
+  UserCheck,
 } from 'lucide-react';
 import { playSuccessChime, playDeniedBuzzer } from '@/lib/utils/audio';
 
@@ -362,45 +367,126 @@ export default function ScannerComponent({
             </button>
           </div>
 
-          {/* Attendee Details Card */}
-          {result.status === 'VALID' && result.attendeeName && (
-            <div className="mt-4 pt-4 border-t border-emerald-200 flex items-center justify-between text-sm">
-              <div>
-                <span className="text-xs text-emerald-700 block">Attendee Name</span>
-                <span className="font-bold text-emerald-900 text-base">{result.attendeeName}</span>
+          {/* Enhanced Attendee Verification Card for Gate Staff */}
+          {result.status === 'VALID' && (
+            <div className="mt-4 pt-4 border-t border-emerald-200 space-y-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-600 text-white flex items-center space-x-1">
+                      <UserCheck className="w-3 h-3" />
+                      <span>
+                        {result.details?.attendeeType === 'NITER_STUDENT'
+                          ? '🎓 NITER Student'
+                          : result.details?.attendeeType === 'NITER_ALUMNI'
+                          ? '🎓 NITER Alumni'
+                          : result.details?.attendeeType === 'EXTERNAL_STUDENT'
+                          ? '🏛️ External University'
+                          : '👤 Event Attendee'}
+                      </span>
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-extrabold text-emerald-950 leading-tight">
+                    {result.attendeeName || result.details?.attendeeName}
+                  </h3>
+                  {result.details?.attendeeEmail && (
+                    <p className="text-xs text-emerald-700">{result.details.attendeeEmail}</p>
+                  )}
+                </div>
+
+                <div className="text-right shrink-0">
+                  <span className="text-[10px] uppercase font-bold text-emerald-700 block">Admitted Gate</span>
+                  <span className="font-extrabold text-xs text-emerald-900 bg-emerald-100 px-2.5 py-1 rounded-md inline-block">
+                    {gateId}
+                  </span>
+                </div>
               </div>
-              <div className="text-right">
-                <span className="text-xs text-emerald-700 block">Admission Gate</span>
-                <span className="font-semibold text-emerald-900">{gateId}</span>
+
+              {/* Attendee Details Grid */}
+              <div className="bg-emerald-100/60 rounded-xl p-3 grid grid-cols-2 gap-2 text-xs text-emerald-900 border border-emerald-200/80">
+                {result.details?.studentId && (
+                  <div>
+                    <span className="text-[10px] uppercase font-semibold text-emerald-700 block">Student ID</span>
+                    <span className="font-bold font-mono">{result.details.studentId}</span>
+                  </div>
+                )}
+                {result.details?.batch && (
+                  <div>
+                    <span className="text-[10px] uppercase font-semibold text-emerald-700 block">Batch</span>
+                    <span className="font-bold">{result.details.batch}</span>
+                  </div>
+                )}
+                {result.details?.department && (
+                  <div className={result.details?.institution ? 'col-span-1' : 'col-span-2'}>
+                    <span className="text-[10px] uppercase font-semibold text-emerald-700 block">Department</span>
+                    <span className="font-bold">{result.details.department}</span>
+                  </div>
+                )}
+                {result.details?.institution && (
+                  <div className="col-span-2">
+                    <span className="text-[10px] uppercase font-semibold text-emerald-700 block">University / Institution</span>
+                    <span className="font-bold">{result.details.institution}</span>
+                  </div>
+                )}
+                {result.details?.attendeePhone && (
+                  <div className="col-span-2 flex items-center space-x-1 pt-1 border-t border-emerald-200/50">
+                    <Phone className="w-3 h-3 text-emerald-700 shrink-0" />
+                    <span className="font-semibold text-emerald-800">Contact:</span>
+                    <span className="font-bold font-mono">{result.details.attendeePhone}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-emerald-600 text-white rounded-xl p-2.5 text-center text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Identity Verified — Allow Entry to Gate</span>
               </div>
             </div>
           )}
 
           {/* Duplicate Scan Diagnostics */}
           {result.status === 'DUPLICATE' && result.details && (
-            <div className="mt-4 pt-3 border-t border-rose-200 text-xs space-y-1">
-              <p className="font-semibold text-rose-900">Previous Check-in Record:</p>
-              <p className="text-rose-800">
-                • Time:{' '}
-                {result.details.initialCheckInAt
-                  ? new Date(result.details.initialCheckInAt).toLocaleTimeString()
-                  : 'Earlier today'}
+            <div className="mt-4 pt-3 border-t border-rose-200 text-xs space-y-2">
+              <div className="bg-rose-100/80 rounded-xl p-3 border border-rose-200 text-rose-950">
+                <p className="font-bold text-rose-900 mb-1 flex items-center space-x-1">
+                  <XCircle className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Previous Admission Record:</span>
+                </p>
+                {result.details.attendeeName && (
+                  <p className="text-rose-900 font-semibold">• Name: {result.details.attendeeName}</p>
+                )}
+                {result.details.studentId && (
+                  <p className="text-rose-800">• Student ID: {result.details.studentId}</p>
+                )}
+                {result.details.institution && (
+                  <p className="text-rose-800">• Institution: {result.details.institution}</p>
+                )}
+                {result.details.attendeePhone && (
+                  <p className="text-rose-800">• Contact: {result.details.attendeePhone}</p>
+                )}
+                <p className="text-rose-800">
+                  • Previous Entry Time:{' '}
+                  {result.details.initialCheckInAt
+                    ? new Date(result.details.initialCheckInAt).toLocaleTimeString()
+                    : 'Earlier today'}
+                </p>
+                <p className="text-rose-800">
+                  • Previous Entry Gate: {result.details.initialGateId || 'Main Gate'}
+                </p>
+              </div>
+              <p className="text-rose-700 font-semibold text-center text-[11px]">
+                ⚠️ Do NOT allow entry. Ticket has already been scanned.
               </p>
-              <p className="text-rose-800">
-                • Gate: {result.details.initialGateId || 'Main Gate'}
-              </p>
-              {result.details.attendeeName && (
-                <p className="text-rose-800">• Registered To: {result.details.attendeeName}</p>
-              )}
             </div>
           )}
 
           <div className="mt-4 flex justify-end">
             <button
               onClick={() => setResult({ status: 'IDLE', message: '' })}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-sm"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-transform active:scale-95 shadow-md flex items-center space-x-1.5"
             >
-              Scan Next Ticket
+              <span>Scan Next Attendee</span>
+              <RotateCcw className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

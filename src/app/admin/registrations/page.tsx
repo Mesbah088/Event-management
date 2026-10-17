@@ -23,6 +23,12 @@ interface RegistrationItem {
   eventTitle: string;
   attendeeName: string;
   attendeeEmail: string;
+  attendeePhone?: string;
+  attendeeType?: string;
+  batch?: string;
+  studentId?: string;
+  department?: string;
+  institution?: string;
   status: 'ISSUED' | 'USED' | 'CANCELLED';
   registeredAt: string;
   checkedInAt?: string;
@@ -257,7 +263,43 @@ export default function AdminRegistrationsPage() {
 
                       <td className="px-6 py-4">
                         <span className="font-bold text-slate-900 block text-sm">{reg.attendeeName}</span>
-                        <span className="text-[11px] text-slate-500 block">{reg.attendeeEmail}</span>
+                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                          {reg.attendeeType && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
+                              {reg.attendeeType === 'NITER_STUDENT'
+                                ? 'NITER Student'
+                                : reg.attendeeType === 'NITER_ALUMNI'
+                                ? 'NITER Alumni'
+                                : reg.attendeeType === 'EXTERNAL_STUDENT'
+                                ? 'External'
+                                : 'Guest'}
+                            </span>
+                          )}
+                          {reg.studentId && (
+                            <span className="text-[11px] font-mono text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">
+                              ID: {reg.studentId}
+                            </span>
+                          )}
+                          {reg.batch && (
+                            <span className="text-[11px] text-slate-600">
+                              ({reg.batch})
+                            </span>
+                          )}
+                        </div>
+                        {reg.institution && reg.institution !== 'NITER' && (
+                          <span className="text-[11px] text-indigo-700 block font-medium mt-0.5">
+                            🏛️ {reg.institution}
+                          </span>
+                        )}
+                        {reg.department && (
+                          <span className="text-[11px] text-slate-500 block">
+                            Dept: {reg.department}
+                          </span>
+                        )}
+                        <span className="text-[11px] text-slate-500 block mt-0.5">{reg.attendeeEmail}</span>
+                        {reg.attendeePhone && (
+                          <span className="text-[11px] text-slate-600 font-mono block">📞 {reg.attendeePhone}</span>
+                        )}
                       </td>
 
                       <td className="px-6 py-4 text-slate-600 font-medium">

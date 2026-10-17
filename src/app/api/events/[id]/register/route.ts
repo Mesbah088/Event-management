@@ -39,7 +39,7 @@ export async function POST(
       );
     }
 
-    const { name, email, phone, studentId, department } = validated.data;
+    const { name, email, phone, attendeeType, batch, studentId, department, institution } = validated.data;
     const normalizedEmail = email.trim().toLowerCase();
 
     const db = await getDb();
@@ -115,9 +115,18 @@ export async function POST(
       attendeeName: name.trim(),
       attendeeEmail: normalizedEmail,
       attendeePhone: phone ? phone.trim() : undefined,
+      attendeeType: attendeeType || 'NITER_STUDENT',
+      batch: batch ? batch.trim() : undefined,
+      studentId: studentId ? studentId.trim() : undefined,
+      department: department ? department.trim() : undefined,
+      institution: institution ? institution.trim() : undefined,
       customFields: {
+        attendeeType: attendeeType || 'NITER_STUDENT',
+        ...(phone ? { phone: phone.trim() } : {}),
+        ...(batch ? { batch: batch.trim() } : {}),
         ...(studentId ? { studentId: studentId.trim() } : {}),
         ...(department ? { department: department.trim() } : {}),
+        ...(institution ? { institution: institution.trim() } : {}),
       },
       ticketRef,
       tokenHash,
@@ -188,6 +197,12 @@ export async function POST(
         ticketRef,
         attendeeName: name.trim(),
         attendeeEmail: normalizedEmail,
+        attendeePhone: phone ? phone.trim() : '',
+        attendeeType: attendeeType || 'NITER_STUDENT',
+        batch: batch ? batch.trim() : '',
+        studentId: studentId ? studentId.trim() : '',
+        department: department ? department.trim() : '',
+        institution: institution ? institution.trim() : '',
         rawToken, // Provided once on success screen for instant display & wallet download
         qrDataUrl,
         eventTitle: event.title,

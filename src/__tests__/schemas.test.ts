@@ -41,6 +41,42 @@ describe('Zod Validation Schemas', () => {
       const result = registrationSchema.safeParse(invalid);
       expect(result.success).toBe(false);
     });
+
+    it('accepts valid NITER student payload with batch and studentId', () => {
+      const valid = {
+        name: 'Md. Mesbah',
+        email: 'mesbah@niter.edu.bd',
+        phone: '01712345678',
+        attendeeType: 'NITER_STUDENT',
+        batch: '11th Batch',
+        studentId: '2022-CSE-099',
+        department: 'CSE',
+      };
+      const result = registrationSchema.safeParse(valid);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.attendeeType).toBe('NITER_STUDENT');
+        expect(result.data.studentId).toBe('2022-CSE-099');
+        expect(result.data.batch).toBe('11th Batch');
+      }
+    });
+
+    it('accepts valid External University student payload with institution', () => {
+      const valid = {
+        name: 'Karim Ahmed',
+        email: 'karim@du.ac.bd',
+        phone: '01812345678',
+        attendeeType: 'EXTERNAL_STUDENT',
+        institution: 'University of Dhaka',
+        department: 'Computer Science',
+      };
+      const result = registrationSchema.safeParse(valid);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.attendeeType).toBe('EXTERNAL_STUDENT');
+        expect(result.data.institution).toBe('University of Dhaka');
+      }
+    });
   });
 
   describe('eventSchema', () => {

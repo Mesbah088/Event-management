@@ -122,6 +122,13 @@ export async function POST(request: NextRequest) {
         ticket: {
           ticketRef: updatedDoc.ticketRef,
           attendeeName: updatedDoc.attendeeName,
+          attendeeEmail: updatedDoc.attendeeEmail,
+          attendeePhone: updatedDoc.attendeePhone || updatedDoc.customFields?.phone,
+          attendeeType: updatedDoc.attendeeType || updatedDoc.customFields?.attendeeType || 'NITER_STUDENT',
+          batch: updatedDoc.batch || updatedDoc.customFields?.batch,
+          studentId: updatedDoc.studentId || updatedDoc.customFields?.studentId,
+          department: updatedDoc.department || updatedDoc.customFields?.department,
+          institution: updatedDoc.institution || updatedDoc.customFields?.institution,
           checkedInAt: now,
           gateId,
         },
@@ -152,6 +159,13 @@ export async function POST(request: NextRequest) {
           initialCheckInAt: existingRegistration.checkedInAt,
           initialGateId: existingRegistration.gateId,
           attendeeName: existingRegistration.attendeeName,
+          attendeeEmail: existingRegistration.attendeeEmail,
+          attendeePhone: existingRegistration.attendeePhone || existingRegistration.customFields?.phone,
+          attendeeType: existingRegistration.attendeeType || existingRegistration.customFields?.attendeeType,
+          batch: existingRegistration.batch || existingRegistration.customFields?.batch,
+          studentId: existingRegistration.studentId || existingRegistration.customFields?.studentId,
+          department: existingRegistration.department || existingRegistration.customFields?.department,
+          institution: existingRegistration.institution || existingRegistration.customFields?.institution,
         };
       } else if (existingRegistration.status === 'CANCELLED') {
         failureOutcome = 'CANCELLED';

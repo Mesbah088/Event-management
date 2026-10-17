@@ -8,9 +8,12 @@ export const loginSchema = z.object({
 export const registrationSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
   email: z.string().trim().email('Invalid email address').toLowerCase(),
-  phone: z.string().trim().regex(/^[0-9+()\- ]*$/, 'Invalid phone number').optional().or(z.literal('')),
+  phone: z.string().trim().max(25, 'Phone number is too long').optional().or(z.literal('')),
+  attendeeType: z.enum(['NITER_STUDENT', 'NITER_ALUMNI', 'EXTERNAL_STUDENT', 'GUEST']).default('NITER_STUDENT'),
+  batch: z.string().trim().max(50).optional().or(z.literal('')),
   studentId: z.string().trim().max(50).optional().or(z.literal('')),
   department: z.string().trim().max(100).optional().or(z.literal('')),
+  institution: z.string().trim().max(150).optional().or(z.literal('')),
 });
 
 export const eventSchema = z.object({
