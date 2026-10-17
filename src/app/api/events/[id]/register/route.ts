@@ -155,6 +155,7 @@ export async function POST(
     const startDateFormatted = new Intl.DateTimeFormat('en-US', {
       dateStyle: 'full',
       timeStyle: 'short',
+      timeZone: 'Asia/Dhaka',
     }).format(new Date(event.startDate));
 
     const appUrl = process.env.APP_URL || 'http://localhost:3000';

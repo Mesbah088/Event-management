@@ -112,6 +112,7 @@ export default async function HomePage() {
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
+                timeZone: 'Asia/Dhaka',
               }).format(new Date(evt.startDate));
 
               const isSoldOut = evt.remainingSeats <= 0;

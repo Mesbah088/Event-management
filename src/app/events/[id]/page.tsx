@@ -72,11 +72,13 @@ export default async function EventDetailsPage({
   const startDateFormatted = new Intl.DateTimeFormat('en-US', {
     dateStyle: 'full',
     timeStyle: 'short',
+    timeZone: 'Asia/Dhaka',
   }).format(new Date(event.startDate));
 
   const deadlineFormatted = new Intl.DateTimeFormat('en-US', {
     dateStyle: 'medium',
     timeStyle: 'short',
+    timeZone: 'Asia/Dhaka',
   }).format(new Date(event.registrationCloseAt));
 
   const capacityPct = Math.min(100, Math.round((event.registeredCount / event.capacity) * 100));
