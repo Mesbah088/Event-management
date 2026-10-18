@@ -65,7 +65,7 @@ export async function POST(
       }
       if (!trxId || !trxId.trim()) {
         return NextResponse.json(
-          { error: 'বহিরাগত বিশ্ববিদ্যালয়ের শিক্ষার্থীদের জন্য রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ ও Transaction ID (TrxID) প্রদান করা বাধ্যতামূলক।' },
+          { error: 'রেজিস্ট্রেশনের জন্য রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ ও Transaction ID (TrxID) প্রদান করা বাধ্যতামূলক।' },
           { status: 400 }
         );
       }
@@ -78,7 +78,7 @@ export async function POST(
       const amount = Number(paymentAmount);
       if (!paymentAmount || isNaN(amount) || amount < 499) {
         return NextResponse.json(
-          { error: 'বহিরাগত শিক্ষার্থীদের জন্য নির্ধারিত রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ করা বাধ্যতামূলক।' },
+          { error: 'নির্ধারিত রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ করা বাধ্যতামূলক।' },
           { status: 400 }
         );
       }

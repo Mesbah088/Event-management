@@ -208,7 +208,7 @@ export default async function EventDetailsPage({
               Join NITER ISLAMIC Conference 2026
             </h3>
             <p className="text-xs sm:text-sm text-slate-300">
-              Open for NITER students (Free admission) and external university participants (Registration fee: ৳499 mandatory). Digital admission pass issued upon verification.
+              রেজিস্ট্রেশন ফি: ৳৪৯৯ (বাধ্যতামূলক)। বিকাশ বা নগদ পেমেন্ট ভেরিফিকেশন সাপেক্ষে প্রবেশাধিকারের ডিজিটাল QR কোড টিকেট প্রদান করা হবে।
             </p>
           </div>
 
@@ -240,8 +240,8 @@ export default async function EventDetailsPage({
           </h3>
 
           <ul className="text-xs sm:text-sm text-slate-600 space-y-2 list-disc list-inside">
-            <li>NITER students can register for free with their student ID. External university students must complete the ৳499 registration fee via bKash/Nagad.</li>
-            <li>After registration, your personalized QR code ticket will be generated instantly and dispatched to your email.</li>
+            <li>সম্মেলনে অংশগ্রহণের জন্য রেজিস্ট্রেশন ফি ৪৯৯ টাকা বিকাশ বা নগদে পরিশোধ করে TrxID দিয়ে রেজিস্ট্রেশন সম্পন্ন করুন।</li>
+            <li>রেজিস্ট্রেশন সম্পন্ন হলে অবিলম্বে আপনার কিউআর কোড টিকিট স্ক্রিনে প্রদর্শিত হবে এবং ইমেইলে সংরক্ষিত হবে।</li>
             <li>Present the digital QR code on your smartphone or a printed copy at any entrance gate scanner.</li>
             <li>
               <strong>One Check-in Invariant:</strong> Every QR code is strictly limited to 1 successful admission. Forwarding or duplicating tickets will result in immediate gate rejection.

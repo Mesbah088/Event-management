@@ -30,7 +30,7 @@ export const registrationSchema = z.object({
     if (!data.trxId || !data.trxId.trim()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'বহিরাগত বিশ্ববিদ্যালয়ের শিক্ষার্থীদের জন্য পেমেন্ট বাধ্যতামূলক। Transaction ID (TrxID) প্রদান করুন।',
+        message: 'রেজিস্ট্রেশনের জন্য পেমেন্ট বাধ্যতামূলক। Transaction ID (TrxID) প্রদান করুন।',
         path: ['trxId'],
       });
     }
@@ -45,7 +45,7 @@ export const registrationSchema = z.object({
     if (!data.paymentAmount || isNaN(amount) || amount < 499) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'বহিরাগত শিক্ষার্থীদের জন্য রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ করা বাধ্যতামূলক।',
+        message: 'রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ করা বাধ্যতামূলক।',
         path: ['paymentAmount'],
       });
     }
