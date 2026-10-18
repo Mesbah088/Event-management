@@ -4,6 +4,10 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'NITER ISLAMIC Conference 2026 — Entry Management System',
   description: 'Official Registration, QR Ticket Issuance, and Multi-Gate Admission Verification for NITER ISLAMIC Conference 2026.',
+  icons: {
+    icon: '/nis-logo.png',
+    apple: '/nis-logo.png',
+  },
 };
 
 export default function RootLayout({

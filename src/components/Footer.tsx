@@ -72,8 +72,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Brand identity */}
         <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-700 to-indigo-600 flex items-center justify-center text-white shadow-sm">
-            <QrCode className="w-4 h-4" />
+          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-slate-200 shadow-sm shrink-0 bg-slate-950">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/nis-logo.png"
+              alt="NITER Islamic Society (NIS)"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
             <span className="font-bold text-slate-900 block text-sm">NITER Islamic Conference 2026</span>

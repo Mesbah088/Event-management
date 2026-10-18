@@ -38,12 +38,17 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-            <QrCode className="w-5 h-5" />
+          <div className="relative w-10 h-10 rounded-full overflow-hidden shadow-md shadow-brand-500/10 group-hover:scale-105 transition-transform border border-slate-200 shrink-0 bg-slate-950">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/nis-logo.png"
+              alt="NITER Islamic Society (NIS)"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
-            <span className="font-bold text-slate-900 tracking-tight text-lg block">NITER Pass</span>
-            <span className="text-xs text-brand-600 block -mt-1 font-semibold">Islamic Conference 2026</span>
+            <span className="font-bold text-slate-900 tracking-tight text-lg block leading-tight">NITER</span>
+            <span className="text-xs text-brand-600 block font-semibold">Islamic Conference 2026</span>
           </div>
         </Link>
 
