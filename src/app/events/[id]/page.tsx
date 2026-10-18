@@ -87,9 +87,9 @@ export default async function EventDetailsPage({
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+      <main className="max-w-4xl mx-auto px-3.5 sm:px-6 lg:px-8 py-6 sm:py-12 flex-1 w-full">
         {/* Breadcrumb */}
-        <div className="text-xs text-slate-500 mb-6 flex items-center space-x-2">
+        <div className="text-xs text-slate-500 mb-4 sm:mb-6 flex items-center space-x-2">
           <Link href="/" className="hover:text-brand-600 transition-colors">
             Events
           </Link>
@@ -98,19 +98,19 @@ export default async function EventDetailsPage({
         </div>
 
         {/* Official Event Banner & Chief Guest Spotlight */}
-        <div className="bg-gradient-to-br from-[#12031c] via-[#240a38] to-[#0c0214] text-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-amber-400/40 mb-8 overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            <div className="md:col-span-7 space-y-4">
-              <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
+        <div className="bg-gradient-to-br from-[#12031c] via-[#240a38] to-[#0c0214] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl border-2 border-amber-400/40 mb-6 sm:mb-8 overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-center">
+            <div className="md:col-span-7 space-y-3 sm:space-y-4 text-center md:text-left">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[11px] sm:text-xs font-bold uppercase tracking-wider">
                 <span>প্রধান অতিথি ঘোষিত</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+              <h2 className="text-xl sm:text-3xl font-extrabold text-white leading-tight">
                 শায়খ ড. মিজানুর রহমান আজহারী
               </h2>
-              <p className="text-xs sm:text-sm text-purple-200">
+              <p className="text-xs sm:text-sm text-purple-200 leading-relaxed">
                 বিশিষ্ট ইসলামিক স্কলার ও গবেষক • চেয়ারম্যান, হাসানাহ ফাউন্ডেশন
               </p>
-              <div className="flex flex-wrap gap-2 text-xs font-semibold pt-1">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs font-semibold pt-1">
                 <span className="px-3 py-1.5 rounded-xl bg-slate-900/80 border border-purple-500/40 text-amber-300">
                   📅 ৮-৯ নভেম্বর ২০২৬
                 </span>
@@ -121,7 +121,7 @@ export default async function EventDetailsPage({
             </div>
 
             <div className="md:col-span-5 flex justify-center">
-              <div className="rounded-2xl overflow-hidden border border-amber-400/40 shadow-xl max-w-xs w-full">
+              <div className="rounded-2xl overflow-hidden border border-amber-400/40 shadow-xl max-w-[220px] sm:max-w-xs w-full">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/event-banner.jpg"
@@ -134,8 +134,8 @@ export default async function EventDetailsPage({
         </div>
 
         {/* Hero Event Header Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-200 mb-8">
-          <div className="flex flex-wrap items-center gap-2 mb-4">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-xl border border-slate-200 mb-6 sm:mb-8">
+          <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
             <span className="px-3 py-1 bg-brand-50 text-brand-600 rounded-full text-xs font-semibold">
               {event.organizer}
             </span>
@@ -151,18 +151,18 @@ export default async function EventDetailsPage({
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3 sm:mb-4 leading-tight">
             {event.title}
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-8">
+          <p className="text-xs sm:text-base text-slate-600 leading-relaxed mb-6 sm:mb-8">
             {event.description}
           </p>
 
           {/* Quick Metrics Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-slate-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-5 sm:pt-6 border-t border-slate-100">
             <div className="flex items-start space-x-3 text-xs sm:text-sm text-slate-700">
-              <Calendar className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+              <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-brand-600 shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold block text-slate-900">Event Date & Time</span>
                 <span>{startDateFormatted}</span>
@@ -170,7 +170,7 @@ export default async function EventDetailsPage({
             </div>
 
             <div className="flex items-start space-x-3 text-xs sm:text-sm text-slate-700">
-              <MapPin className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-brand-600 shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold block text-slate-900">Venue Location</span>
                 <span>{event.venue}</span>
@@ -178,7 +178,7 @@ export default async function EventDetailsPage({
             </div>
 
             <div className="flex items-start space-x-3 text-xs sm:text-sm text-slate-700">
-              <Clock className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-brand-600 shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold block text-slate-900">Registration Deadline</span>
                 <span>{deadlineFormatted}</span>
@@ -186,7 +186,7 @@ export default async function EventDetailsPage({
             </div>
 
             <div className="flex items-start space-x-3 text-xs sm:text-sm text-slate-700">
-              <Building className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
+              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-brand-600 shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold block text-slate-900">Configured Gates</span>
                 <span>{event.gates?.join(', ') || 'Main Gate'}</span>
@@ -196,7 +196,7 @@ export default async function EventDetailsPage({
         </div>
 
         {/* Registration Call-to-Action Card */}
-        <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="bg-slate-900 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6">
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -212,11 +212,11 @@ export default async function EventDetailsPage({
             </p>
           </div>
 
-          <div>
+          <div className="w-full sm:w-auto">
             {isOpen ? (
               <Link
                 href={`/events/${event.slug}/register`}
-                className="inline-flex items-center space-x-2 px-8 py-4 rounded-2xl bg-brand-500 hover:bg-brand-400 text-white font-bold text-sm shadow-xl shadow-brand-500/20 active:scale-95 transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-brand-500 hover:bg-brand-400 text-white font-bold text-sm shadow-xl shadow-brand-500/20 active:scale-95 transition-all text-center"
               >
                 <span>Register For Event</span>
                 <ArrowRight className="w-4 h-4" />
@@ -224,7 +224,7 @@ export default async function EventDetailsPage({
             ) : (
               <button
                 disabled
-                className="px-8 py-4 rounded-2xl bg-slate-800 text-slate-500 font-bold text-sm cursor-not-allowed border border-slate-700"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-slate-800 text-slate-500 font-bold text-sm cursor-not-allowed border border-slate-700"
               >
                 Registration Unavailable
               </button>
@@ -233,7 +233,7 @@ export default async function EventDetailsPage({
         </div>
 
         {/* Event Entry Guidelines */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-slate-200 shadow-sm space-y-3 sm:space-y-4 mb-6 sm:mb-8">
           <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-emerald-600" />
             <span>Attendee Entry Guidelines</span>
