@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { QrCode, Shield, Camera, LogOut, User, Heart } from 'lucide-react';
+import { QrCode, Shield, Camera, LogOut, User, Heart, BookOpen } from 'lucide-react';
 
 interface SessionInfo {
   authenticated: boolean;
@@ -71,6 +71,15 @@ export default function Navbar() {
           >
             <span>স্পন্সর</span>
             <span className="hidden md:inline"> (Sponsors)</span>
+          </Link>
+
+          <Link
+            href="/#quiz-section"
+            className="px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold text-amber-600 hover:text-amber-700 hover:bg-amber-50 transition-colors flex items-center space-x-1"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+            <span>কুইজ বই</span>
+            <span className="hidden md:inline"> (Quiz)</span>
           </Link>
 
           <Link

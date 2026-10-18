@@ -14,6 +14,7 @@ describe('Zod Validation Schemas', () => {
         name: 'Jane Doe',
         email: 'JANE.DOE@Campus.Edu',
         phone: '+1 (555) 234-5678',
+        attendeeType: 'NITER_STUDENT',
         studentId: 'ST-9912',
         department: 'Computer Science',
       };
@@ -61,7 +62,7 @@ describe('Zod Validation Schemas', () => {
       }
     });
 
-    it('accepts valid External University student payload with institution', () => {
+    it('accepts valid External University student payload with mandatory payment of 499', () => {
       const valid = {
         name: 'Karim Ahmed',
         email: 'karim@du.ac.bd',
@@ -69,12 +70,55 @@ describe('Zod Validation Schemas', () => {
         attendeeType: 'EXTERNAL_STUDENT',
         institution: 'University of Dhaka',
         department: 'Computer Science',
+        trxId: 'BKT98A76X1',
+        senderPhone: '01812345678',
+        paymentAmount: '499',
+        paymentMethod: 'bKash',
       };
       const result = registrationSchema.safeParse(valid);
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.attendeeType).toBe('EXTERNAL_STUDENT');
         expect(result.data.institution).toBe('University of Dhaka');
+        expect(result.data.trxId).toBe('BKT98A76X1');
+        expect(result.data.paymentAmount).toBe('499');
+      }
+    });
+
+    it('rejects External University student payload if payment details or TrxID is missing', () => {
+      const invalid = {
+        name: 'Karim Ahmed',
+        email: 'karim@du.ac.bd',
+        phone: '01812345678',
+        attendeeType: 'EXTERNAL_STUDENT',
+        institution: 'University of Dhaka',
+        department: 'Computer Science',
+      };
+      const result = registrationSchema.safeParse(invalid);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const errorMessages = result.error.errors.map(e => e.message);
+        expect(errorMessages.some(m => m.includes('Transaction ID (TrxID)'))).toBe(true);
+      }
+    });
+
+    it('rejects External University student payload if payment amount is less than 499', () => {
+      const invalid = {
+        name: 'Karim Ahmed',
+        email: 'karim@du.ac.bd',
+        phone: '01812345678',
+        attendeeType: 'EXTERNAL_STUDENT',
+        institution: 'University of Dhaka',
+        department: 'Computer Science',
+        trxId: 'BKT98A76X1',
+        senderPhone: '01812345678',
+        paymentAmount: '200',
+      };
+      const result = registrationSchema.safeParse(invalid);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const errorMessages = result.error.errors.map(e => e.message);
+        expect(errorMessages.some(m => m.includes('৪৯৯ টাকা'))).toBe(true);
       }
     });
   });

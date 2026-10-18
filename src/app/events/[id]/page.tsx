@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import DonationSection from '@/components/DonationSection';
 import SponsorSection from '@/components/SponsorSection';
+import QuizSection from '@/components/QuizSection';
 import {
   Calendar,
   MapPin,
@@ -207,7 +208,7 @@ export default async function EventDetailsPage({
               Join NITER ISLAMIC Conference 2026
             </h3>
             <p className="text-xs sm:text-sm text-slate-300">
-              Open for NITER students, alumni, and external university participants. Free digital admission pass issued immediately upon form submission.
+              Open for NITER students (Free admission) and external university participants (Registration fee: ৳499 mandatory). Digital admission pass issued upon verification.
             </p>
           </div>
 
@@ -239,6 +240,7 @@ export default async function EventDetailsPage({
           </h3>
 
           <ul className="text-xs sm:text-sm text-slate-600 space-y-2 list-disc list-inside">
+            <li>NITER students can register for free with their student ID. External university students must complete the ৳499 registration fee via bKash/Nagad.</li>
             <li>After registration, your personalized QR code ticket will be generated instantly and dispatched to your email.</li>
             <li>Present the digital QR code on your smartphone or a printed copy at any entrance gate scanner.</li>
             <li>
@@ -250,6 +252,9 @@ export default async function EventDetailsPage({
 
         {/* Highlighted Sponsors & Partners Section */}
         <SponsorSection />
+
+        {/* Islamic Quiz & Syllabus Book Download Section */}
+        <QuizSection />
 
         {/* Voluntary Conference Donation Section */}
         <DonationSection />

@@ -65,13 +65,40 @@ export async function POST(
       }
       if (!trxId || !trxId.trim()) {
         return NextResponse.json(
-          { error: 'বহিরাগত শিক্ষার্থীদের জন্য Transaction ID (TrxID) প্রদান করা আবশ্যক।' },
+          { error: 'বহিরাগত বিশ্ববিদ্যালয়ের শিক্ষার্থীদের জন্য রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ ও Transaction ID (TrxID) প্রদান করা বাধ্যতামূলক।' },
+          { status: 400 }
+        );
+      }
+      if (!senderPhone || !senderPhone.trim()) {
+        return NextResponse.json(
+          { error: 'যে নম্বর থেকে বিকাশ বা নগদ করা হয়েছে সেই প্রেরক নম্বরটি (Sender Phone) প্রদান করা আবশ্যক।' },
+          { status: 400 }
+        );
+      }
+      const amount = Number(paymentAmount);
+      if (!paymentAmount || isNaN(amount) || amount < 499) {
+        return NextResponse.json(
+          { error: 'বহিরাগত শিক্ষার্থীদের জন্য নির্ধারিত রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ করা বাধ্যতামূলক।' },
           { status: 400 }
         );
       }
     }
 
     const db = await getDb();
+
+    // Prevent duplicate TrxID usage across registrations
+    if (attendeeType === 'EXTERNAL_STUDENT' && trxId) {
+      const cleanTrx = trxId.trim().toUpperCase();
+      const existingTrxRegistration = await db.collection<Registration>('registrations').findOne({
+        trxId: cleanTrx,
+      });
+      if (existingTrxRegistration) {
+        return NextResponse.json(
+          { error: 'এই Transaction ID (TrxID) দিয়ে ইতোমধ্যে রেজিস্ট্রেশন সম্পন্ন করা হয়েছে। অনুগ্রহ করে নতুন পেমেন্ট সম্পন্ন করে সঠিক TrxID দিন।' },
+          { status: 409 }
+        );
+      }
+    }
 
     // Query event
     let query: any = { slug: id };
@@ -151,9 +178,9 @@ export async function POST(
       institution: institution ? institution.trim() : (attendeeType === 'NITER_STUDENT' ? 'NITER' : undefined),
       trxId: trxId ? trxId.trim().toUpperCase() : undefined,
       senderPhone: senderPhone ? senderPhone.trim() : undefined,
-      paymentAmount: paymentAmount ? paymentAmount.trim() : undefined,
+      paymentAmount: attendeeType === 'EXTERNAL_STUDENT' ? (paymentAmount ? paymentAmount.trim() : '499') : (paymentAmount ? paymentAmount.trim() : undefined),
       paymentMethod: (paymentMethod as any) || (trxId ? 'bKash' : undefined),
-      paymentStatus: trxId ? 'PAID' : (attendeeType === 'EXTERNAL_STUDENT' ? 'PAID' : 'FREE'),
+      paymentStatus: attendeeType === 'EXTERNAL_STUDENT' ? 'PAID' : (trxId ? 'PAID' : 'FREE'),
       customFields: {
         attendeeType: attendeeType || 'EXTERNAL_STUDENT',
         ...(phone ? { phone: phone.trim() } : {}),
@@ -163,7 +190,7 @@ export async function POST(
         ...(institution ? { institution: institution.trim() } : {}),
         ...(trxId ? { trxId: trxId.trim().toUpperCase() } : {}),
         ...(senderPhone ? { senderPhone: senderPhone.trim() } : {}),
-        ...(paymentAmount ? { paymentAmount: paymentAmount.trim() } : {}),
+        ...(attendeeType === 'EXTERNAL_STUDENT' ? { paymentAmount: paymentAmount ? paymentAmount.trim() : '499' } : (paymentAmount ? { paymentAmount: paymentAmount.trim() } : {})),
         ...(paymentMethod ? { paymentMethod } : {}),
       },
       ticketRef,
@@ -235,7 +262,7 @@ export async function POST(
         donorUniversity: institution ? institution.trim() : (attendeeType === 'NITER_STUDENT' ? 'NITER' : 'External'),
         donorBatch: batch ? batch.trim() : '',
         donorPhone: senderPhone ? senderPhone.trim() : (phone ? phone.trim() : ''),
-        amount: paymentAmount ? (Number(paymentAmount) || paymentAmount) : 'Registration Fee',
+        amount: attendeeType === 'EXTERNAL_STUDENT' ? (paymentAmount ? Number(paymentAmount) || 499 : 499) : (paymentAmount ? (Number(paymentAmount) || paymentAmount) : 'Registration Fee'),
         trxId: trxId.trim().toUpperCase(),
         reference: `${name.trim()}_${institution ? institution.trim() : 'External'}_${batch ? batch.trim() : ''}`.replace(/\s+/g, '_'),
         paymentMethod: paymentMethod || 'bKash',
@@ -260,8 +287,9 @@ export async function POST(
         department: department ? department.trim() : '',
         institution: institution ? institution.trim() : (attendeeType === 'NITER_STUDENT' ? 'NITER' : ''),
         trxId: trxId ? trxId.trim().toUpperCase() : '',
+        paymentAmount: attendeeType === 'EXTERNAL_STUDENT' ? (paymentAmount ? paymentAmount.trim() : '499') : (paymentAmount ? paymentAmount.trim() : ''),
         paymentMethod: paymentMethod || (trxId ? 'bKash' : ''),
-        paymentStatus: trxId ? 'PAID' : (attendeeType === 'EXTERNAL_STUDENT' ? 'PAID' : 'FREE'),
+        paymentStatus: attendeeType === 'EXTERNAL_STUDENT' ? 'PAID' : (trxId ? 'PAID' : 'FREE'),
         rawToken, // Provided once on success screen for instant display & wallet download
         qrDataUrl,
         eventTitle: event.title,

@@ -29,6 +29,11 @@ interface RegistrationItem {
   studentId?: string;
   department?: string;
   institution?: string;
+  trxId?: string;
+  senderPhone?: string;
+  paymentAmount?: string | number;
+  paymentMethod?: string;
+  paymentStatus?: string;
   status: 'ISSUED' | 'USED' | 'CANCELLED';
   registeredAt: string;
   checkedInAt?: string;
@@ -299,6 +304,18 @@ export default function AdminRegistrationsPage() {
                         <span className="text-[11px] text-slate-500 block mt-0.5">{reg.attendeeEmail}</span>
                         {reg.attendeePhone && (
                           <span className="text-[11px] text-slate-600 font-mono block">📞 {reg.attendeePhone}</span>
+                        )}
+                        {(reg.trxId || reg.attendeeType === 'EXTERNAL_STUDENT') && (
+                          <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
+                              💰 ৳{reg.paymentAmount || '499'} {reg.paymentMethod ? `(${reg.paymentMethod})` : ''}
+                            </span>
+                            {reg.trxId && (
+                              <span className="text-[10px] font-mono font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">
+                                Trx: {reg.trxId}
+                              </span>
+                            )}
+                          </div>
                         )}
                       </td>
 

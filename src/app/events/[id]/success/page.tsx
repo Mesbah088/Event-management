@@ -30,6 +30,7 @@ interface TicketData {
   department?: string;
   institution?: string;
   trxId?: string;
+  paymentAmount?: string;
   paymentMethod?: string;
   paymentStatus?: string;
   qrDataUrl: string;
@@ -202,12 +203,20 @@ function SuccessContent({ eventSlug }: { eventSlug: string }) {
                 <span className="font-semibold text-slate-700 text-right">{ticket.attendeeEmail}</span>
               </div>
             )}
-            {ticket?.trxId && (
-              <div className="flex justify-between items-center bg-emerald-50 p-2 rounded-lg border border-emerald-200">
-                <span className="text-emerald-800 font-semibold">Payment TrxID:</span>
-                <span className="font-mono font-bold text-emerald-900 text-right">
-                  {ticket.trxId} {ticket.paymentMethod ? `(${ticket.paymentMethod})` : ''}
-                </span>
+            {(ticket?.trxId || ticket?.paymentAmount || ticket?.attendeeType === 'EXTERNAL_STUDENT') && (
+              <div className="flex justify-between items-center bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+                <div>
+                  <span className="text-[10px] font-bold text-emerald-800 uppercase block tracking-wider">Registration Payment</span>
+                  <span className="text-xs font-bold text-emerald-900">
+                    ৳{ticket.paymentAmount || '499'} {ticket.paymentMethod ? `(${ticket.paymentMethod})` : ''} • PAID
+                  </span>
+                </div>
+                {ticket?.trxId && (
+                  <div className="text-right">
+                    <span className="text-[10px] font-medium text-emerald-700 block">TrxID:</span>
+                    <span className="font-mono font-bold text-xs text-emerald-950">{ticket.trxId}</span>
+                  </div>
+                )}
               </div>
             )}
             {ticket?.startDateFormatted && (

@@ -18,6 +18,38 @@ export const registrationSchema = z.object({
   senderPhone: z.string().trim().max(25).optional().or(z.literal('')),
   paymentAmount: z.string().trim().max(20).optional().or(z.literal('')),
   paymentMethod: z.enum(['bKash', 'Nagad']).optional().or(z.literal('')),
+}).superRefine((data, ctx) => {
+  if (data.attendeeType === 'EXTERNAL_STUDENT') {
+    if (!data.institution || !data.institution.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'বিশ্ববিদ্যালয়ের নাম (University name) প্রদান করা আবশ্যক।',
+        path: ['institution'],
+      });
+    }
+    if (!data.trxId || !data.trxId.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'বহিরাগত বিশ্ববিদ্যালয়ের শিক্ষার্থীদের জন্য পেমেন্ট বাধ্যতামূলক। Transaction ID (TrxID) প্রদান করুন।',
+        path: ['trxId'],
+      });
+    }
+    if (!data.senderPhone || !data.senderPhone.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'যে নম্বর থেকে টাকা পাঠানো হয়েছে সেই প্রেরক নম্বরটি (Sender Phone) প্রদান করা আবশ্যক।',
+        path: ['senderPhone'],
+      });
+    }
+    const amount = Number(data.paymentAmount);
+    if (!data.paymentAmount || isNaN(amount) || amount < 499) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'বহিরাগত শিক্ষার্থীদের জন্য রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ করা বাধ্যতামূলক।',
+        path: ['paymentAmount'],
+      });
+    }
+  }
 });
 
 export const eventSchema = z.object({

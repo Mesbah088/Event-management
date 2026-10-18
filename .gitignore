@@ -29,3 +29,7 @@ yarn-error.log*
 # Operating System
 .DS_Store
 Thumbs.db
+
+# Large Book Assets (hosted on Google Drive)
+Book/
+public/books/

@@ -39,7 +39,7 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
     // Payment details for External University Students
     trxId: '',
     senderPhone: '',
-    paymentAmount: '',
+    paymentAmount: '499',
     paymentMethod: 'bKash' as 'bKash' | 'Nagad',
   });
 
@@ -91,7 +91,7 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
     }
 
     const appName = method === 'bKash' ? 'bKash' : 'Nagad';
-    setRedirectToast(`নম্বর (${displayFormattedNumber}) কপি হয়েছে! ${appName} অ্যাপে রেফারেন্সে "${computedReference}" দিয়ে Send Money করুন।`);
+    setRedirectToast(`নম্বর (${displayFormattedNumber}) কপি হয়েছে! ${appName} অ্যাপে ৳৪৯৯ Send Money করার সময় রেফারেন্সে "${computedReference}" দিয়ে TrxID সংগ্রহ করুন।`);
     setTimeout(() => setRedirectToast(null), 6000);
 
     if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
@@ -152,11 +152,16 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
         return;
       }
       if (!formData.trxId.trim()) {
-        setErrorMsg('বিকাশ বা নগদ থেকে পেমেন্ট করে প্রাপ্ত Transaction ID (TrxID) প্রদান করা আবশ্যক।');
+        setErrorMsg('বহিরাগত বিশ্ববিদ্যালয়ের জন্য রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ ও Transaction ID (TrxID) প্রদান করা বাধ্যতামূলক।');
         return;
       }
       if (!formData.senderPhone.trim()) {
         setErrorMsg('যে নম্বর থেকে বিকাশ বা নগদ করা হয়েছে সেই প্রেরক নম্বরটি লিখুন।');
+        return;
+      }
+      const amountNum = Number(formData.paymentAmount);
+      if (!formData.paymentAmount || isNaN(amountNum) || amountNum < 499) {
+        setErrorMsg('বহিরাগত বিশ্ববিদ্যালয়ের শিক্ষার্থীদের জন্য নির্ধারিত রেজিস্ট্রেশন ফি ৪৯৯ টাকা পরিশোধ করা বাধ্যতামূলক।');
         return;
       }
     } else {
@@ -250,36 +255,60 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
             </h1>
             <p className="text-xs text-slate-500 mt-2 max-w-md mx-auto leading-relaxed">
               {isExternal
-                ? 'অন্যান্য বিশ্ববিদ্যালয়ের শিক্ষার্থীদের রেজিস্ট্রেশন সম্পন্ন করতে নিচের ফর্মটি পূরণ করুন এবং বিকাশ/নগদে পেমেন্ট করে TrxID দিন।'
+                ? 'অন্যান্য বিশ্ববিদ্যালয়ের শিক্ষার্থীদের রেজিস্ট্রেশন ফি ৪৯৯ টাকা (বাধ্যতামূলক)। বিকাশ বা নগদে পেমেন্ট করে TrxID দিয়ে ফর্মটি পূরণ করুন।'
                 : 'নিটারের নিয়মিত শিক্ষার্থীদের জন্য ফ্রি রেজিস্ট্রেশন ফর্ম। আপনার একাডেমিক তথ্য দিন।'}
             </p>
 
             {/* Category Switcher Tabs */}
-            <div className="mt-5 p-1 bg-slate-100 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row max-w-md mx-auto border border-slate-200 gap-1 sm:gap-0">
+            <div className="mt-5 p-1 bg-slate-100 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row max-w-lg mx-auto border border-slate-200 gap-1 sm:gap-0">
               <button
                 type="button"
-                onClick={() => setFormData({ ...formData, attendeeType: 'EXTERNAL_STUDENT' })}
-                className={`flex-1 py-2 px-3 rounded-lg sm:rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    attendeeType: 'EXTERNAL_STUDENT',
+                    paymentAmount: '499',
+                  }))
+                }
+                className={`flex-1 py-2.5 px-3 rounded-lg sm:rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
                   isExternal
                     ? 'bg-emerald-600 text-white shadow-md'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <Building className="w-3.5 h-3.5 shrink-0" />
-                <span>External <span className="hidden sm:inline">University </span>(অন্যান্য ভার্সিটি)</span>
+                <span>External Univ (অন্যান্য)</span>
+                <span className={`px-1.5 py-0.5 rounded text-[10px] font-extrabold ml-1 ${
+                  isExternal ? 'bg-amber-400 text-slate-950' : 'bg-slate-200 text-slate-700'
+                }`}>
+                  ৳৪৯৯
+                </span>
               </button>
 
               <button
                 type="button"
-                onClick={() => setFormData({ ...formData, attendeeType: 'NITER_STUDENT' })}
-                className={`flex-1 py-2 px-3 rounded-lg sm:rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    attendeeType: 'NITER_STUDENT',
+                    paymentAmount: '',
+                    trxId: '',
+                    senderPhone: '',
+                  }))
+                }
+                className={`flex-1 py-2.5 px-3 rounded-lg sm:rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
                   !isExternal
                     ? 'bg-brand-600 text-white shadow-md'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <GraduationCap className="w-3.5 h-3.5 shrink-0" />
-                <span>NITER Student (নিটারিয়ান)</span>
+                <span>NITER Student (নিটার)</span>
+                <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ml-1 ${
+                  !isExternal ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
+                }`}>
+                  ফ্রি
+                </span>
               </button>
             </div>
           </div>
@@ -430,8 +459,27 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
                     <span>পেমেন্ট প্রসেস ও TrxID ভেরিফিকেশন (Payment Required)</span>
                   </div>
                   <p className="text-xs text-slate-300 mt-1">
-                    বিকাশ বা নগদ পার্সোনাল নম্বরে Send Money করে প্রাপ্ত Transaction ID (TrxID) নিচে প্রদান করুন।
+                    অন্যান্য বিশ্ববিদ্যালয়ের শিক্ষার্থীদের রেজিস্ট্রেশন ফি ৪৯৯ টাকা। বিকাশ বা নগদ নম্বরে Send Money করে TrxID ও প্রেরক নম্বর নিচে প্রদান করুন। পেমেন্ট না করলে রেজিস্ট্রেশন সম্পন্ন হবে না।
                   </p>
+                </div>
+
+                {/* Prominent Fee Badge */}
+                <div className="bg-gradient-to-r from-amber-500/20 via-emerald-500/15 to-slate-900 border border-amber-400/50 rounded-2xl p-3.5 flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center space-x-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                      <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-300">
+                        নির্ধারিত রেজিস্ট্রেশন ফি
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-200">
+                      বহিরাগত শিক্ষার্থীদের জন্য ফি পরিশোধ বাধ্যতামূলক
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-2xl font-black font-mono text-amber-300 tracking-tight">৳৪৯৯</span>
+                    <span className="text-[10px] text-amber-200/80 block font-semibold">ফিক্সড রেজি: ফি</span>
+                  </div>
                 </div>
 
                 {/* Direct App Launch / Method Selector Buttons */}
@@ -459,7 +507,7 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
                       </div>
                       <div>
                         <span className="text-xs font-bold text-white block">bKash (বিকাশ)</span>
-                        <span className="text-[10px] text-slate-300 block">Open App</span>
+                        <span className="text-[10px] text-slate-300 block">Send Money ৳499</span>
                       </div>
                     </div>
                     <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -485,7 +533,7 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
                       </div>
                       <div>
                         <span className="text-xs font-bold text-white block">Nagad (নগদ)</span>
-                        <span className="text-[10px] text-slate-300 block">Open App</span>
+                        <span className="text-[10px] text-slate-300 block">Send Money ৳499</span>
                       </div>
                     </div>
                     <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -582,15 +630,19 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
 
                     <div>
                       <label className="block text-xs font-bold text-slate-300 mb-1 uppercase tracking-wider">
-                        টাকার পরিমাণ (Amount ৳)
+                        টাকার পরিমাণ (Amount ৳) <span className="text-red-400">*</span>
                       </label>
-                      <input
-                        type="number"
-                        placeholder="e.g. 100, 200, 500"
-                        value={formData.paymentAmount}
-                        onChange={(e) => setFormData({ ...formData, paymentAmount: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white font-mono focus:outline-none focus:ring-2 focus:ring-emerald-400 placeholder-slate-500"
-                      />
+                      <div className="relative">
+                        <input
+                          type="number"
+                          readOnly
+                          value={formData.paymentAmount || '499'}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-amber-500/50 text-sm text-amber-300 font-mono font-bold focus:outline-none cursor-not-allowed"
+                        />
+                        <span className="absolute right-3 top-2.5 text-[10px] font-bold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30">
+                          ফিক্সড ৳৪৯৯
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -621,7 +673,7 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
                   <>
                     <span>
                       {isExternal
-                        ? 'রেজিস্ট্রেশন ও পেমেন্ট কনফার্ম করুন (Get QR Ticket)'
+                        ? '৳৪৯৯ পেমেন্ট ও রেজিস্ট্রেশন কনফার্ম করুন (Get QR Ticket)'
                         : 'রেজিস্ট্রেশন নিশ্চিত করুন (Get QR Ticket)'}
                     </span>
                     <ArrowRight className="w-4 h-4" />

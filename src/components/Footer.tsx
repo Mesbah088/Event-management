@@ -99,6 +99,9 @@ export default function Footer() {
           <Link href="/#sponsors" className="hover:text-purple-600 font-semibold transition-colors">
             স্পন্সরবৃন্দ
           </Link>
+          <Link href="/#quiz-section" className="hover:text-amber-600 font-semibold transition-colors">
+            কুইজ বই
+          </Link>
           <Link href="/#donation-section" className="hover:text-emerald-600 font-semibold transition-colors">
             অনুদান
           </Link>

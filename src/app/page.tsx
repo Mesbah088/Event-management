@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import DonationSection from '@/components/DonationSection';
 import SponsorSection from '@/components/SponsorSection';
+import QuizSection from '@/components/QuizSection';
 import {
   Calendar,
   MapPin,
@@ -15,6 +16,7 @@ import {
   Building,
   Heart,
   ChevronRight,
+  BookOpen,
 } from 'lucide-react';
 import { getDb } from '@/lib/db/mongodb';
 import { Event } from '@/types';
@@ -159,6 +161,14 @@ export default async function HomePage() {
                 </Link>
 
                 <a
+                  href="#quiz-section"
+                  className="w-full sm:w-auto px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-300 font-semibold text-xs border border-emerald-500/40 flex items-center justify-center space-x-1.5 transition-all shadow-md"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>কুইজ সিলেবাস বই</span>
+                </a>
+
+                <a
                   href="#donation-section"
                   className="w-full sm:w-auto px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-purple-950/60 hover:bg-purple-900/80 text-amber-300 font-semibold text-xs border border-purple-500/30 flex items-center justify-center space-x-1.5 transition-all"
                 >
@@ -207,6 +217,11 @@ export default async function HomePage() {
       {/* HIGHLIGHTED SPONSORS & PARTNERS SECTION                         */}
       {/* ============================================================== */}
       <SponsorSection />
+
+      {/* ============================================================== */}
+      {/* ISLAMIC QUIZ & SYLLABUS BOOK DOWNLOAD SECTION                  */}
+      {/* ============================================================== */}
+      <QuizSection />
 
       {/* ============================================================== */}
       {/* ACTIVE EVENTS DIRECTORY                                         */}
