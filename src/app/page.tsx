@@ -89,23 +89,23 @@ export default async function HomePage() {
               </h1>
 
               {/* Chief Guest Highlight Box */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-purple-950/90 via-slate-900/90 to-purple-950/80 border-2 border-amber-400/40 shadow-2xl relative overflow-hidden text-left">
-                <div className="absolute top-0 right-0 px-3 py-1 bg-amber-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider rounded-bl-xl shadow-md">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-purple-950/90 via-slate-900/90 to-purple-950/80 border-2 border-amber-400/40 shadow-2xl relative overflow-hidden text-left">
+                <div className="absolute top-0 right-0 px-2.5 sm:px-3 py-0.5 sm:py-1 bg-amber-500 text-slate-950 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider rounded-bl-xl shadow-md">
                   CHIEF GUEST
                 </div>
 
-                <div className="flex items-start space-x-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center shrink-0 font-bold text-xl shadow-inner">
+                <div className="flex items-start space-x-3 sm:space-x-3.5 pt-1 sm:pt-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center shrink-0 font-bold text-lg sm:text-xl shadow-inner">
                     🎙️
                   </div>
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300/90 block">
+                  <div className="min-w-0">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-300/90 block truncate">
                       সম্মেলনের প্রধান আকর্ষণ ও প্রধান অতিথি
                     </span>
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight mt-0.5">
+                    <h2 className="text-lg sm:text-2xl font-extrabold text-white tracking-tight mt-0.5">
                       শায়খ ড. মিজানুর রহমান আজহারী
                     </h2>
-                    <p className="text-xs sm:text-sm text-purple-200/90 mt-1">
+                    <p className="text-[11px] sm:text-sm text-purple-200/90 mt-0.5 sm:mt-1 leading-snug">
                       বিশিষ্ট ইসলামিক স্কলার ও গবেষক • চেয়ারম্যান, হাসানাহ ফাউন্ডেশন
                     </p>
                   </div>
@@ -113,8 +113,8 @@ export default async function HomePage() {
               </div>
 
               {/* Key Event Metadata Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                <div className="p-3 rounded-2xl bg-slate-900/80 border border-purple-500/30 flex items-center space-x-3 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-1">
+                <div className="p-3 rounded-xl sm:rounded-2xl bg-slate-900/80 border border-purple-500/30 flex items-center space-x-3 text-left">
                   <Calendar className="w-5 h-5 text-amber-400 shrink-0" />
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">তারিখ (Date)</span>
@@ -122,7 +122,7 @@ export default async function HomePage() {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-slate-900/80 border border-purple-500/30 flex items-center space-x-3 text-left">
+                <div className="p-3 rounded-xl sm:rounded-2xl bg-slate-900/80 border border-purple-500/30 flex items-center space-x-3 text-left">
                   <MapPin className="w-5 h-5 text-emerald-400 shrink-0" />
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">স্থান (Venue)</span>
@@ -130,7 +130,7 @@ export default async function HomePage() {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-slate-900/80 border border-purple-500/30 flex items-center space-x-3 text-left">
+                <div className="p-3 rounded-xl sm:rounded-2xl bg-slate-900/80 border border-purple-500/30 flex items-center space-x-3 text-left">
                   <Building className="w-5 h-5 text-purple-400 shrink-0" />
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">আয়োজনে (Organized By)</span>
@@ -140,10 +140,10 @@ export default async function HomePage() {
               </div>
 
               {/* CTA Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-4 pt-2">
                 <Link
                   href="/events/niter-islamic-conference-2026/register"
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-extrabold text-sm shadow-xl shadow-amber-500/25 flex items-center justify-center space-x-2 transition-all active:scale-95 group"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm shadow-xl shadow-amber-500/25 flex items-center justify-center space-x-2 transition-all active:scale-95 group"
                 >
                   <Ticket className="w-4 h-4 text-slate-950" />
                   <span>এখনই রেজিস্ট্রেশন করুন (Register Now)</span>
@@ -152,7 +152,7 @@ export default async function HomePage() {
 
                 <Link
                   href="/events/niter-islamic-conference-2026"
-                  className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-white font-bold text-sm border border-purple-500/40 shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-95"
+                  className="w-full sm:w-auto px-5 sm:px-6 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm border border-purple-500/40 shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-95"
                 >
                   <span>বিস্তারিত ও সূচি দেখুন</span>
                   <ChevronRight className="w-4 h-4 text-purple-400" />
@@ -160,7 +160,7 @@ export default async function HomePage() {
 
                 <a
                   href="#donation-section"
-                  className="w-full sm:w-auto px-5 py-4 rounded-2xl bg-purple-950/60 hover:bg-purple-900/80 text-amber-300 font-semibold text-xs border border-purple-500/30 flex items-center justify-center space-x-1.5 transition-all"
+                  className="w-full sm:w-auto px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-purple-950/60 hover:bg-purple-900/80 text-amber-300 font-semibold text-xs border border-purple-500/30 flex items-center justify-center space-x-1.5 transition-all"
                 >
                   <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
                   <span>স্বেচ্ছাসেবী অনুদান</span>

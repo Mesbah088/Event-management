@@ -235,15 +235,15 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
           <span className="text-slate-800 font-semibold">Registration</span>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-200">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-xl border border-slate-200">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold mb-3 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] sm:text-xs font-bold mb-3 shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>NITER ISLAMIC Conference 2026 • ৯ নভেম্বর ২০২৬</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               {isExternal
                 ? 'বহিরাগত বিশ্ববিদ্যালয় শিক্ষার্থী রেজিস্ট্রেশন'
                 : 'নিটার শিক্ষার্থী রেজিস্ট্রেশন'}
@@ -255,30 +255,30 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
             </p>
 
             {/* Category Switcher Tabs */}
-            <div className="mt-5 p-1 bg-slate-100 rounded-2xl flex max-w-md mx-auto border border-slate-200">
+            <div className="mt-5 p-1 bg-slate-100 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row max-w-md mx-auto border border-slate-200 gap-1 sm:gap-0">
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, attendeeType: 'EXTERNAL_STUDENT' })}
-                className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+                className={`flex-1 py-2 px-3 rounded-lg sm:rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
                   isExternal
                     ? 'bg-emerald-600 text-white shadow-md'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <Building className="w-3.5 h-3.5" />
-                <span>External University (অন্যান্য ভার্সিটি)</span>
+                <Building className="w-3.5 h-3.5 shrink-0" />
+                <span>External <span className="hidden sm:inline">University </span>(অন্যান্য ভার্সিটি)</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, attendeeType: 'NITER_STUDENT' })}
-                className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+                className={`flex-1 py-2 px-3 rounded-lg sm:rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
                   !isExternal
                     ? 'bg-brand-600 text-white shadow-md'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <GraduationCap className="w-3.5 h-3.5" />
+                <GraduationCap className="w-3.5 h-3.5 shrink-0" />
                 <span>NITER Student (নিটারিয়ান)</span>
               </button>
             </div>

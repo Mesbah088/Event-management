@@ -167,25 +167,25 @@ export default function DonationSection({
 
   return (
     <section id="donation-section" className="w-full my-8">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 text-white shadow-2xl border border-emerald-500/30 p-6 sm:p-10">
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 text-white shadow-2xl border border-emerald-500/30 p-4 sm:p-8 md:p-10">
         {/* Glow ambient background elements */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl mx-auto">
           {/* Header & Hadith Badge */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold mb-4">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center space-x-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[11px] sm:text-xs font-semibold mb-3 sm:mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>সাদাকাহ জারিয়াহ • দ্বীনি কাজে অংশগ্রহণ</span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-3">
+            <h2 className="text-xl sm:text-3xl font-extrabold tracking-tight text-white mb-2 sm:mb-3">
               কনফারেন্স আয়োজনে স্বেচ্ছাসেবী অনুদান
             </h2>
 
             {/* Quranic Verse */}
-            <div className="bg-emerald-900/40 border border-emerald-500/20 rounded-2xl p-4 my-4 text-emerald-100 text-xs sm:text-sm italic leading-relaxed text-center">
+            <div className="bg-emerald-900/40 border border-emerald-500/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 my-3 sm:my-4 text-emerald-100 text-xs sm:text-sm italic leading-relaxed text-center">
               &ldquo;যারা আল্লাহর পথে তাদের সম্পদ ব্যয় করে, তাদের উপমা একটি শস্যবীজের ন্যায়, যা থেকে সাতটি শীষ উৎপন্ন হয় এবং প্রতিটি শীষে থাকে একশত দানা...&rdquo;
               <span className="block mt-1 font-semibold text-emerald-300 not-italic text-xs">
                 — সূরা আল-বাকারা, আয়াত: ২৬১
@@ -206,7 +206,7 @@ export default function DonationSection({
               সরাসরি অ্যাপে রিডাইরেক্ট করুন (Direct Mobile App Launch)
             </span>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {/* bKash Direct Button Card */}
               <button
                 type="button"
@@ -214,33 +214,33 @@ export default function DonationSection({
                   setSelectedMethod('bkash');
                   handleDirectAppRedirect('bkash');
                 }}
-                className={`p-4 rounded-2xl border transition-all text-left flex items-center justify-between group active:scale-95 shadow-lg ${
+                className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all text-left flex items-center justify-between group active:scale-95 shadow-lg ${
                   selectedMethod === 'bkash'
                     ? 'bg-gradient-to-r from-[#E2136E]/20 to-[#E2136E]/40 border-[#E2136E] ring-2 ring-[#E2136E]/50'
                     : 'bg-slate-900/80 border-slate-700 hover:border-[#E2136E]/60'
                 }`}
               >
-                <div className="flex items-center space-x-3.5">
+                <div className="flex items-center space-x-3 sm:space-x-3.5 min-w-0">
                   {/* bKash Official Icon SVG */}
-                  <div className="w-12 h-12 rounded-xl bg-[#E2136E] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#E2136E]/40 font-extrabold text-base tracking-tighter">
-                    <svg viewBox="0 0 100 100" className="w-8 h-8 fill-white">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#E2136E] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#E2136E]/40 font-extrabold text-base tracking-tighter">
+                    <svg viewBox="0 0 100 100" className="w-7 h-7 sm:w-8 sm:h-8 fill-white">
                       <path d="M48.2 26.5L34.1 63.8l20.4-7.4 12.5-29.9z" />
                       <path d="M14.7 32.2l20.8 14.3-1.4 3.7-19.4-18z" opacity="0.9" />
                       <path d="M85.3 46.2l-22.1-5.7 3.8 9.3 18.3-3.6z" opacity="0.9" />
                       <path d="M43.9 66.8l-8.6 15.7 13.9-9.2z" opacity="0.8" />
                     </svg>
                   </div>
-                  <div>
-                    <span className="text-base font-extrabold text-white block group-hover:text-[#E2136E] transition-colors">
+                  <div className="min-w-0">
+                    <span className="text-sm sm:text-base font-extrabold text-white block group-hover:text-[#E2136E] transition-colors truncate">
                       bKash (বিকাশ)
                     </span>
-                    <span className="text-xs text-slate-300 block">
-                      ক্লিক করলেই সরাসরি বিকাশ অ্যাপ খুলবে
+                    <span className="text-[11px] sm:text-xs text-slate-300 block truncate">
+                      ক্লিক করলেই বিকাশ অ্যাপ খুলবে
                     </span>
                   </div>
                 </div>
 
-                <div className="px-3 py-1.5 rounded-xl bg-[#E2136E] text-white text-[11px] font-bold flex items-center space-x-1 shrink-0 group-hover:scale-105 transition-transform shadow-sm">
+                <div className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#E2136E] text-white text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 shrink-0 group-hover:scale-105 transition-transform shadow-sm ml-2">
                   <span>Open App</span>
                   <ExternalLink className="w-3 h-3" />
                 </div>
@@ -253,30 +253,30 @@ export default function DonationSection({
                   setSelectedMethod('nagad');
                   handleDirectAppRedirect('nagad');
                 }}
-                className={`p-4 rounded-2xl border transition-all text-left flex items-center justify-between group active:scale-95 shadow-lg ${
+                className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all text-left flex items-center justify-between group active:scale-95 shadow-lg ${
                   selectedMethod === 'nagad'
                     ? 'bg-gradient-to-r from-[#F7941D]/20 to-[#ED1C24]/30 border-[#F7941D] ring-2 ring-[#F7941D]/50'
                     : 'bg-slate-900/80 border-slate-700 hover:border-[#F7941D]/60'
                 }`}
               >
-                <div className="flex items-center space-x-3.5">
+                <div className="flex items-center space-x-3 sm:space-x-3.5 min-w-0">
                   {/* Nagad Official Icon SVG */}
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#F7941D] to-[#ED1C24] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#F7941D]/40 font-extrabold text-base">
-                    <svg viewBox="0 0 100 100" className="w-8 h-8 fill-white">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#F7941D] to-[#ED1C24] flex items-center justify-center text-white shrink-0 shadow-md shadow-[#F7941D]/40 font-extrabold text-base">
+                    <svg viewBox="0 0 100 100" className="w-7 h-7 sm:w-8 sm:h-8 fill-white">
                       <path d="M50 15c-11 15-22 30-22 43 0 13 10 24 22 24s22-11 22-24c0-13-11-28-22-43zm0 55c-6 0-11-5-11-12 0-8 6-17 11-25 5 8 11 17 11 25 0 7-5 12-11 12z" />
                     </svg>
                   </div>
-                  <div>
-                    <span className="text-base font-extrabold text-white block group-hover:text-[#F7941D] transition-colors">
+                  <div className="min-w-0">
+                    <span className="text-sm sm:text-base font-extrabold text-white block group-hover:text-[#F7941D] transition-colors truncate">
                       Nagad (নগদ)
                     </span>
-                    <span className="text-xs text-slate-300 block">
-                      ক্লিক করলেই সরাসরি নগদ অ্যাপ খুলবে
+                    <span className="text-[11px] sm:text-xs text-slate-300 block truncate">
+                      ক্লিক করলেই নগদ অ্যাপ খুলবে
                     </span>
                   </div>
                 </div>
 
-                <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#F7941D] to-[#ED1C24] text-white text-[11px] font-bold flex items-center space-x-1 shrink-0 group-hover:scale-105 transition-transform shadow-sm">
+                <div className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#F7941D] to-[#ED1C24] text-white text-[10px] sm:text-[11px] font-bold flex items-center space-x-1 shrink-0 group-hover:scale-105 transition-transform shadow-sm ml-2">
                   <span>Open App</span>
                   <ExternalLink className="w-3 h-3" />
                 </div>
@@ -286,7 +286,7 @@ export default function DonationSection({
 
           {/* Toast Notification when app launch / copy triggered */}
           {redirectToast && (
-            <div className="mb-6 p-4 rounded-2xl bg-emerald-600/90 border border-emerald-400 text-white text-xs font-semibold flex items-center justify-between shadow-xl animate-in fade-in slide-in-from-top-2">
+            <div className="mb-6 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-emerald-600/90 border border-emerald-400 text-white text-xs font-semibold flex items-center justify-between shadow-xl animate-in fade-in slide-in-from-top-2">
               <div className="flex items-center space-x-2.5">
                 <CheckCircle2 className="w-5 h-5 text-white shrink-0" />
                 <span>{redirectToast}</span>
@@ -302,11 +302,11 @@ export default function DonationSection({
           )}
 
           {/* Account Number & Reference Card */}
-          <div className="bg-slate-900/90 rounded-3xl p-5 sm:p-6 border border-slate-700/80 mb-6 shadow-xl space-y-4">
+          <div className="bg-slate-900/90 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-slate-700/80 mb-6 shadow-xl space-y-4">
             {/* bKash / Nagad Number Box */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 bg-slate-800/80 rounded-2xl border border-slate-700">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 sm:p-4 bg-slate-800/80 rounded-xl sm:rounded-2xl border border-slate-700">
               <div className="text-center sm:text-left">
-                <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
+                <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
                   {selectedMethod === 'bkash' ? 'bKash Personal (Send Money)' : 'Nagad Personal (Send Money)'}
                 </span>
                 <span className="text-2xl sm:text-3xl font-mono font-extrabold text-white tracking-wider block">
@@ -316,7 +316,7 @@ export default function DonationSection({
               <button
                 type="button"
                 onClick={handleCopyNumber}
-                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center space-x-1.5 transition-transform active:scale-95 shadow-md shadow-emerald-600/30 shrink-0"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition-transform active:scale-95 shadow-md shadow-emerald-600/30 shrink-0"
               >
                 {copiedNumber ? (
                   <>
@@ -333,24 +333,24 @@ export default function DonationSection({
             </div>
 
             {/* Reference Box with Name, Versity & Batch */}
-            <div className="p-4 sm:p-5 bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-950 rounded-2xl border border-emerald-500/40 shadow-inner space-y-3.5">
+            <div className="p-3.5 sm:p-5 bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-950 rounded-xl sm:rounded-2xl border border-emerald-500/40 shadow-inner space-y-3.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-800/50 pb-3">
                 <div>
                   <span className="text-xs uppercase tracking-wider text-emerald-400 font-bold flex items-center space-x-1.5">
-                    <Tag className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>রেফারেন্স কোড (Reference Code): Name, Versity & Batch</span>
+                    <Tag className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>রেফারেন্স কোড: Name, Versity & Batch</span>
                   </span>
                   <span className="text-[11px] text-emerald-200/90 block mt-0.5">
-                    বিকাশ বা নগদে Send Money করার সময় রেফারেন্সে আপনার নাম, ভার্সিটি ও ব্যাচ দিন
+                    বিকাশ বা নগদে Send Money করার সময় রেফারেন্সে দিন
                   </span>
                 </div>
-                <div className="text-[11px] text-emerald-300 bg-emerald-900/70 px-2.5 py-1 rounded-lg border border-emerald-500/30 shrink-0 font-medium self-start sm:self-auto">
+                <div className="text-[10px] sm:text-[11px] text-emerald-300 bg-emerald-900/70 px-2.5 py-1 rounded-lg border border-emerald-500/30 shrink-0 font-medium self-start sm:self-auto">
                   ফরম্যাট: <span className="font-mono font-bold text-white">[Name]_[Versity]_[Batch]</span>
                 </div>
               </div>
 
               {/* 3 Interactive Quick Fields for Name, Versity, Batch */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5 pt-1">
                 <div>
                   <label className="block text-[11px] text-slate-300 font-semibold mb-1">
                     ১. আপনার নাম (Name)
@@ -390,17 +390,17 @@ export default function DonationSection({
               </div>
 
               {/* Dynamic Reference Output & Copy Action */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 bg-slate-950/80 rounded-xl border border-emerald-500/40 mt-2">
-                <div className="text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-3.5 bg-slate-950/80 rounded-xl border border-emerald-500/40 mt-2">
+                <div className="text-center sm:text-left w-full sm:w-auto">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block">
                     আপনার তৈরি হওয়া রেফারেন্স কোড:
                   </span>
-                  <div className="flex items-center space-x-2 mt-0.5">
-                    <span className="text-lg sm:text-xl font-bold font-mono text-emerald-300 tracking-wide bg-emerald-950/90 px-2.5 py-0.5 rounded-lg border border-emerald-500/40">
+                  <div className="flex items-center justify-center sm:justify-start space-x-2 mt-1">
+                    <span className="text-base sm:text-xl font-bold font-mono text-emerald-300 tracking-wide bg-emerald-950/90 px-2.5 py-0.5 rounded-lg border border-emerald-500/40 break-all">
                       {computedReference}
                     </span>
                     <span className="text-[11px] text-emerald-400/90 hidden md:inline">
-                      (বিকাশ/নগদ রেফারেন্সে পেস্ট করুন)
+                      (রেফারেন্সে পেস্ট করুন)
                     </span>
                   </div>
                 </div>
@@ -408,7 +408,7 @@ export default function DonationSection({
                 <button
                   type="button"
                   onClick={handleCopyRef}
-                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center space-x-1.5 transition-transform active:scale-95 shadow-md shadow-emerald-600/30 shrink-0"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition-transform active:scale-95 shadow-md shadow-emerald-600/30 shrink-0"
                 >
                   {copiedRef ? (
                     <>
@@ -418,7 +418,7 @@ export default function DonationSection({
                   ) : (
                     <>
                       <Copy className="w-4 h-4 text-white" />
-                      <span>কপি রেফারেন্স ({computedReference})</span>
+                      <span>কপি রেফারেন্স কোড</span>
                     </>
                   )}
                 </button>
