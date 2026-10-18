@@ -126,7 +126,7 @@ export default async function HomePage() {
                   <MapPin className="w-5 h-5 text-emerald-400 shrink-0" />
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">স্থান (Venue)</span>
-                    <span className="text-xs sm:text-sm font-extrabold text-white truncate">নাইটার কেন্দ্রীয় মাঠ</span>
+                    <span className="text-xs sm:text-sm font-extrabold text-white truncate">নিটার কেন্দ্রীয় মাঠ</span>
                   </div>
                 </div>
 

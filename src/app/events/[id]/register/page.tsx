@@ -161,11 +161,11 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
       }
     } else {
       if (!formData.studentId.trim()) {
-        setErrorMsg('নাইটার স্টুডেন্ট আইডি প্রদান করা আবশ্যক।');
+        setErrorMsg('নিটার স্টুডেন্ট আইডি প্রদান করা আবশ্যক।');
         return;
       }
       if (!formData.batch.trim()) {
-        setErrorMsg('আপনার নাইটার ব্যাচ উল্লেখ করুন (e.g. 11th, 12th, 13th)।');
+        setErrorMsg('আপনার নিটার ব্যাচ উল্লেখ করুন (e.g. 11th, 12th, 13th)।');
         return;
       }
       if (!formData.department.trim()) {
@@ -246,12 +246,12 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               {isExternal
                 ? 'বহিরাগত বিশ্ববিদ্যালয় শিক্ষার্থী রেজিস্ট্রেশন'
-                : 'নাইটার শিক্ষার্থী রেজিস্ট্রেশন'}
+                : 'নিটার শিক্ষার্থী রেজিস্ট্রেশন'}
             </h1>
             <p className="text-xs text-slate-500 mt-2 max-w-md mx-auto leading-relaxed">
               {isExternal
                 ? 'অন্যান্য বিশ্ববিদ্যালয়ের শিক্ষার্থীদের রেজিস্ট্রেশন সম্পন্ন করতে নিচের ফর্মটি পূরণ করুন এবং বিকাশ/নগদে পেমেন্ট করে TrxID দিন।'
-                : 'নাইটারের নিয়মিত শিক্ষার্থীদের জন্য ফ্রি রেজিস্ট্রেশন ফর্ম। আপনার একাডেমিক তথ্য দিন।'}
+                : 'নিটারের নিয়মিত শিক্ষার্থীদের জন্য ফ্রি রেজিস্ট্রেশন ফর্ম। আপনার একাডেমিক তথ্য দিন।'}
             </p>
 
             {/* Category Switcher Tabs */}
@@ -279,7 +279,7 @@ export default function RegisterPage({ params }: { params: { id: string } }) {
                 }`}
               >
                 <GraduationCap className="w-3.5 h-3.5" />
-                <span>NITER Student (নাইটারিয়ান)</span>
+                <span>NITER Student (নিটারিয়ান)</span>
               </button>
             </div>
           </div>

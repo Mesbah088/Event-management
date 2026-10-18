@@ -114,7 +114,7 @@ export default async function EventDetailsPage({
                   📅 ৮-৯ নভেম্বর ২০২৬
                 </span>
                 <span className="px-3 py-1.5 rounded-xl bg-slate-900/80 border border-purple-500/40 text-emerald-300">
-                  📍 নাইটার কেন্দ্রীয় মাঠ
+                  📍 নিটার কেন্দ্রীয় মাঠ
                 </span>
               </div>
             </div>
