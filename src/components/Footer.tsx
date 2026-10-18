@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ShieldCheck, Lock, QrCode, Sparkles, Award } from 'lucide-react';
+import { ShieldCheck, Lock, QrCode, Sparkles, Award, Gift, Coffee } from 'lucide-react';
 import { SPONSORS } from '@/data/sponsors';
 
 
@@ -34,7 +34,13 @@ export default function Footer() {
                   <span
                     className={`inline-flex items-center space-x-1 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${sponsor.badgeBg} ${sponsor.badgeText}`}
                   >
-                    <Award className="w-2.5 h-2.5 shrink-0" />
+                    {sponsor.tier.toLowerCase().includes('gift') ? (
+                      <Gift className="w-2.5 h-2.5 shrink-0" />
+                    ) : sponsor.tier.toLowerCase().includes('drink') ? (
+                      <Coffee className="w-2.5 h-2.5 shrink-0" />
+                    ) : (
+                      <Award className="w-2.5 h-2.5 shrink-0" />
+                    )}
                     <span>{sponsor.tier}</span>
                   </span>
                 </div>

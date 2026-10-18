@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Sparkles, Award, HeartHandshake, Star } from 'lucide-react';
+import { Sparkles, Award, Gift, Coffee, HeartHandshake, Star } from 'lucide-react';
 
 import { SPONSORS, type SponsorItem } from '@/data/sponsors';
 export { SPONSORS, type SponsorItem };
@@ -48,7 +48,13 @@ export default function SponsorSection() {
                 <span
                   className={`inline-flex items-center space-x-1.5 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border shadow-sm ${sponsor.badgeBg} ${sponsor.badgeText}`}
                 >
-                  <Award className="w-3 h-3 shrink-0" />
+                  {sponsor.tier.toLowerCase().includes('gift') ? (
+                    <Gift className="w-3 h-3 shrink-0" />
+                  ) : sponsor.tier.toLowerCase().includes('drink') ? (
+                    <Coffee className="w-3 h-3 shrink-0" />
+                  ) : (
+                    <Award className="w-3 h-3 shrink-0" />
+                  )}
                   <span>{sponsor.tier}</span>
                 </span>
 
