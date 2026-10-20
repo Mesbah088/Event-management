@@ -21,11 +21,17 @@ const FALLBACK_MONGODB_URI =
 
 function cleanMongoUri(uri?: string | null): string {
   if (!uri) return FALLBACK_MONGODB_URI;
-  const trimmed = uri.trim().replace(/^["']|["']$/g, '');
+  const trimmed = uri.trim().replace(/^["']|["']$/g, '').replace(/[\r\n\t]/g, '');
   if (!trimmed || trimmed.includes('<') || trimmed.includes('>') || !trimmed.startsWith('mongodb')) {
     return FALLBACK_MONGODB_URI;
   }
   return trimmed;
+}
+
+export function cleanDbName(name?: string | null): string {
+  if (!name) return 'university_events';
+  const cleaned = name.trim().replace(/^["']|["']$/g, '').replace(/[\r\n\t]/g, '');
+  return cleaned || 'university_events';
 }
 
 declare global {
@@ -84,7 +90,7 @@ export async function getDb(): Promise<Db> {
   try {
     const connectedClient = await getClientPromise();
     if (connectedClient) {
-      const dbName = process.env.MONGODB_DB_NAME || 'university_events';
+      const dbName = cleanDbName(process.env.MONGODB_DB_NAME);
       return connectedClient.db(dbName);
     }
   } catch (err: any) {
