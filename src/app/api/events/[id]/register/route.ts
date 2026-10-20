@@ -232,7 +232,9 @@ export async function POST(
       timeZone: 'Asia/Dhaka',
     }).format(new Date(event.startDate));
 
-    const appUrl = process.env.APP_URL || 'http://localhost:3000';
+    const appUrl =
+      process.env.APP_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://event-management-beta-beige.vercel.app');
     const ticketUrl = `${appUrl}/events/${event.slug}/success?ticketRef=${encodeURIComponent(ticketRef)}`;
 
     // Dispatch confirmation email
